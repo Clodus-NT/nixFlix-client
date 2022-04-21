@@ -618,12 +618,12 @@ module.exports = require('./cjs/react-refresh-runtime.development.js');
     exports.setSignature = setSignature;
 })();
 
-},{}],"k2XMz":[function(require,module,exports) {
+},{}],"cjPs2":[function(require,module,exports) {
 var HMR_HOST = null;
 var HMR_PORT = null;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "69f74e7f31319ffd";
-module.bundle.HMR_BUNDLE_ID = "2dba8b266701a6e1";
+module.bundle.HMR_BUNDLE_ID = "b6822b6c48d73ca9";
 "use strict";
 function _createForOfIteratorHelper(o, allowArrayLike) {
     var it;
@@ -932,11 +932,11 @@ function hmrAcceptRun(bundle, id) {
     acceptedAssets[id] = true;
 }
 
-},{}],"dLPEP":[function(require,module,exports) {
-var $parcel$ReactRefreshHelpers$b058 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+},{}],"6cF5V":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$bf09 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
-$parcel$ReactRefreshHelpers$b058.prelude(module);
+$parcel$ReactRefreshHelpers$bf09.prelude(module);
 
 try {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -966,22 +966,23 @@ var _mainView = require("./components/main-view/main-view");
 var _indexScss = require("./index.scss");
 const container = document.getElementById("app-container");
 const root = _client.createRoot(container);
+console.log('do this');
 root.render(/*#__PURE__*/ _jsxRuntime.jsx(_reactDefault.default.StrictMode, {
     __source: {
-        fileName: "src/index.jsx",
-        lineNumber: 34
+        fileName: "src/index.js",
+        lineNumber: 36
     },
     __self: undefined,
     children: /*#__PURE__*/ _jsxRuntime.jsx(_mainView.MainView, {
         __source: {
-            fileName: "src/index.jsx",
-            lineNumber: 35
+            fileName: "src/index.js",
+            lineNumber: 37
         },
         __self: undefined
     })
 }));
 
-  $parcel$ReactRefreshHelpers$b058.postlude(module);
+  $parcel$ReactRefreshHelpers$bf09.postlude(module);
 } finally {
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
@@ -25131,18 +25132,13 @@ class MainView extends _reactDefault.default.Component {
             selectedMovie: null
         };
     }
-    setSelectedMovie(newSelectedMovie) {
-        this.setState({
-            selectedMovie: newSelectedMovie
-        });
-    }
     render() {
         const { movies , selectedMovie  } = this.state;
         if (selectedMovie) return(/*#__PURE__*/ _jsxRuntime.jsx(_movieView.MovieView, {
             movie: selectedMovie,
             __source: {
                 fileName: "src/components/main-view/main-view.jsx",
-                lineNumber: 27
+                lineNumber: 21
             },
             __self: this
         }));
@@ -25150,40 +25146,40 @@ class MainView extends _reactDefault.default.Component {
             className: "main-view",
             __source: {
                 fileName: "src/components/main-view/main-view.jsx",
-                lineNumber: 29
+                lineNumber: 23
             },
             __self: this,
             children: "The list is empty!"
         }));
-        return(/*#__PURE__*/ _jsxRuntime.jsx("div", {
+        return(/*#__PURE__*/ _jsxRuntime.jsxs("div", {
             className: "main-view",
             __source: {
                 fileName: "src/components/main-view/main-view.jsx",
-                lineNumber: 32
+                lineNumber: 26
             },
             __self: this,
-            children: selectedMovie ? /*#__PURE__*/ _jsxRuntime.jsx(_movieView.MovieView, {
-                movie: selectedMovie,
-                onBackClick: (newSelectedMovie)=>{
-                    this.setSelectedMovie(newSelectedMovie);
-                },
-                __source: {
-                    fileName: "src/components/main-view/main-view.jsx",
-                    lineNumber: 34
-                },
-                __self: this
-            }) : movies.map((movie)=>/*#__PURE__*/ _jsxRuntime.jsx(_movieCard.MovieCard, {
-                    movie: movie,
-                    onMovieClick: (movie1)=>{
-                        this.setSelectedMovie(movie1);
+            children: [
+                /*#__PURE__*/ _jsxRuntime.jsx("button", {
+                    onClick: ()=>{
+                        alert('Nice!');
                     },
                     __source: {
                         fileName: "src/components/main-view/main-view.jsx",
-                        lineNumber: 37
+                        lineNumber: 27
                     },
-                    __self: this
-                }, movie._id)
-            )
+                    __self: this,
+                    children: "Click me!"
+                }),
+                movies.map((movie)=>/*#__PURE__*/ _jsxRuntime.jsx(_movieCard.MovieCard, {
+                        movie: movie,
+                        __source: {
+                            fileName: "src/components/main-view/main-view.jsx",
+                            lineNumber: 29
+                        },
+                        __self: this
+                    }, movie._id)
+                )
+            ]
         }));
     }
 }
@@ -25468,12 +25464,9 @@ var _react = require("react");
 var _reactDefault = parcelHelpers.interopDefault(_react);
 class MovieCard extends _reactDefault.default.Component {
     render() {
-        const { movie , onMovieClick  } = this.props;
+        const { movie  } = this.props;
         return(/*#__PURE__*/ _jsxRuntime.jsx("div", {
             className: "movie-card",
-            onClick: ()=>{
-                onMovieClick(movie);
-            },
             __source: {
                 fileName: "src/components/movie-card/movie-card.jsx",
                 lineNumber: 7
@@ -25489,6 +25482,6 @@ class MovieCard extends _reactDefault.default.Component {
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-runtime":"8xIwr","react":"6TuXu","@parcel/transformer-js/src/esmodule-helpers.js":"5lGN4","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"lpaPZ"}],"jUTZ8":[function() {},{}]},["9NtYk","k2XMz","dLPEP"], "dLPEP", "parcelRequiree1a7")
+},{"react/jsx-runtime":"8xIwr","react":"6TuXu","@parcel/transformer-js/src/esmodule-helpers.js":"5lGN4","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"lpaPZ"}],"jUTZ8":[function() {},{}]},["9NtYk","cjPs2","6cF5V"], "6cF5V", "parcelRequiree1a7")
 
-//# sourceMappingURL=index.6701a6e1.js.map
+//# sourceMappingURL=index.48d73ca9.js.map
