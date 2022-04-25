@@ -1,11 +1,10 @@
 import React from 'react';
 import axios from 'axios';
-import Container from 'react-bootstrap/Container';
 
 import { LoginView } from '../login-view/login-view';
 import { MovieView } from '../movie-view/movie-view';
 import { MovieCard } from '../movie-card/movie-card';
-import { Col, Row } from 'react-bootstrap';
+import { Container, Col, Row } from 'react-bootstrap';
 
 export class MainView extends React.Component {
     constructor() {
@@ -57,20 +56,22 @@ export class MainView extends React.Component {
         if (movies.length === 0) return <div className="main-view" />;
 
         return (
-            <Row className="main-view justify-content-md-center">
-                {selectedMovie
-                    ?   (
-                        <Col md={8}>
-                            <MovieView movie={selectedMovie} onBackClick={newSelectedMovie => {this.setSelectedMovie(newSelectedMovie); }} />
-                        </Col>
-                    )
-                    :   movies.map(movie => (
-                        <Col md={3}>
-                            <MovieCard key={movie._id} movie={movie} onMovieClick={newSelectedMovie => {this.setSelectedMovie(newSelectedMovie); }} />
-                        </Col>
-                    ))
-                }
-            </Row>
+            <Container>
+                <Row className="main-view justify-content-md-center">
+                    {selectedMovie
+                        ?   (
+                            <Col md={8}>
+                                <MovieView movie={selectedMovie} onBackClick={newSelectedMovie => {this.setSelectedMovie(newSelectedMovie); }} />
+                            </Col>
+                        )
+                        :   movies.map(movie => (
+                            <Col md={3}>
+                                <MovieCard key={movie._id} movie={movie} onMovieClick={newSelectedMovie => {this.setSelectedMovie(newSelectedMovie); }} />
+                            </Col>
+                        ))
+                    }
+                </Row>
+            </Container>
         );
     }
 }
