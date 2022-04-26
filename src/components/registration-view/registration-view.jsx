@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import { Form, Button, Card, Cardgroup, Container, Col, Row, CardGroup } from 'react-bootstrap';
+import './registration-view.scss'
 
 export function RegistrationView(props) {
     const [username, setUsername] = useState('');
