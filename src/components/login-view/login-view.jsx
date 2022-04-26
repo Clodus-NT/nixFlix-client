@@ -21,7 +21,8 @@ export function LoginView(props) {
                 <Col>
                     <CardGroup>
                         <Card>
-                            <Card.Title>
+                            <Card.Title style={{
+                                padding: '10px'}}>
                                 Welcome to nixFlix!
                             </Card.Title>
                             <Card.Body>
@@ -42,7 +43,11 @@ export function LoginView(props) {
                                             placeholder="Enter your username"
                                         />
                                     </Form.Group>
-                                    <Button variant="primary" type="submit" onClick={handleSubmit}>Submit</Button>
+                                    <Button 
+                                        style={{paddingTop: '5px'}}
+                                        variant="primary" 
+                                        type="submit" 
+                                        onClick={handleSubmit}>Submit</Button>
                                     {/* <Button>Register</Button> */}
                                 </Form>
                             </Card.Body>
