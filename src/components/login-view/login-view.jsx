@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import {Form, Button, Card, Cardgroup, Container, Col, Row, CardGroup } from 'react-bootstrap';
-// import Form from 'react-bootstrap/Form';
-// import Button from 'react-bootstrap/Button';
+import './login-view.scss';
 
 export function LoginView(props) {
     const [ username, setUsername ] = useState('');
@@ -16,13 +15,12 @@ export function LoginView(props) {
     }
 
     return (
-        <Container>
+        <Container id='login-view-container'>
             <Row>
                 <Col>
                     <CardGroup>
                         <Card>
-                            <Card.Title style={{
-                                padding: '10px'}}>
+                            <Card.Title id='login-view-card-title'>
                                 Welcome to nixFlix!
                             </Card.Title>
                             <Card.Body>
@@ -44,7 +42,7 @@ export function LoginView(props) {
                                         />
                                     </Form.Group>
                                     <Button 
-                                        style={{paddingTop: '5px'}}
+                                        id='login-view-submit-button'
                                         variant="primary" 
                                         type="submit" 
                                         onClick={handleSubmit}>Submit</Button>

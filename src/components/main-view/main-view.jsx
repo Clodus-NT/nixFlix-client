@@ -5,6 +5,7 @@ import { LoginView } from '../login-view/login-view';
 import { MovieView } from '../movie-view/movie-view';
 import { MovieCard } from '../movie-card/movie-card';
 import { Container, Col, Row } from 'react-bootstrap';
+import './main-view.scss';
 
 export class MainView extends React.Component {
     constructor() {

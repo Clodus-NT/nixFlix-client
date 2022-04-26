@@ -12,12 +12,12 @@ export function RegistrationView(props) {
     };
 
     return (
-        <Container>
+        <Container id='registration-view-container'>
             <Row>
                 <Col>
                     <CardGroup>
                         <Card>
-                            <Card.Title>
+                            <Card.Title id='registration-view-card-title'>
                                 Get started using nixFlix!
                             </Card.Title>
                             <Card.Body>
@@ -57,7 +57,7 @@ export function RegistrationView(props) {
                                                 placeholder="Choose a password"
                                             />
                                     </Form.Group>
-                                    <Button type="button" onClick={handleSubmit}>Register</Button>
+                                    <Button id='registration-view-button' type="button" onClick={handleSubmit}>Register</Button>
                                 </Form>
                             </Card.Body>
                         </Card>
