@@ -87,6 +87,7 @@ export class MainView extends React.Component {
 
         return (
             <Router>
+                <button onClick={() => { this.onLoggedOut() }}>Logout</button>
                 <Row className="main-view justify-content-md-center">
                     <Route exact path="/" render={() => {
                         return movies.map(m => (
