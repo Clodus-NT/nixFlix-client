@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
+import { MenuBar } from '../navbar/navbar';
 import { LoginView } from '../login-view/login-view';
 import { RegistrationView } from '../registration-view/registration-view';
 import { MovieView } from '../movie-view/movie-view';
@@ -87,8 +88,17 @@ export class MainView extends React.Component {
 
         return (
             <Router>
-                <button onClick={() => { this.onLoggedOut() }}>Logout</button>
+                <MenuBar user={user} />
+                <Container>
                 <Row className="main-view justify-content-md-center">
+
+                    <Route path="/register" render={() => {
+                        if (user) return <Redirect to="/" />
+                        return <Col lg={8} md={8}>
+                            <RegistrationView />
+                        </Col>
+                    }} />
+
                     <Route exact path="/" render={() => {
                         return movies.map(m => (
                             <Col md={3} key={m._id}>
@@ -96,92 +106,37 @@ export class MainView extends React.Component {
                             </Col>
                         ))
                     }} />
-                    <Route path="/movies/:movieId" render={({ match }) => {
+
+                    <Route path="/movies/:movieId" render={({ match, history }) => {
                         return <Col md={8}>
-                            <MovieView movie={movies.find(m => m._id === match.params.movieId)} />
+                            <MovieView movie={movies.find(m => m._id === match.params.movieId)} onBackClick={() => history.goBack()} />
                         </Col>
                     }} />
+
+                    <Route path="/movies/director/:name" render={( { match, history }) => {
+                        if (!user) return <Redirect to="/" />
+                        return <Col>
+                            <DirectorView movie={movies.find(m => m._id === match.params.movieId )} onBackClick={() => history.goBack()} />
+                        </Col>
+                    }} />
+
+                    <Route path={`/users/${user}`} render={({ match, history }) => {
+                        if (!user) return <Redirect to="/" />
+                        return <Col>
+                            <ProfileView movies={movies} user={user} onBackClick={() => history.goBack()} />
+                        </Col>
+                    }} />
+
+                    <Route path={`/user-update/${user}`} render={({ match, history}) => {
+                        if (!user) return <Redirect to="/" />
+                        return <Col>
+                            <UserUpdate user={user} onBackClick={() => history.goBack()} />
+                        </Col>
+                    }} />
+
                 </Row>
+                </Container>
             </Router>
-            // <Container>
-            //     <button onClick={() => { this.onLoggedOut() }}>Logout</button>
-            //     <Row className="main-view justify-content-md-center">
-            //         {selectedMovie
-            //             ?   (
-            //                 <Col md={8}>
-            //                     <MovieView movie={selectedMovie} onBackClick={newSelectedMovie => {this.setSelectedMovie(newSelectedMovie); }} />
-            //                 </Col>
-            //             )
-            //             :   movies.map(movie => (
-            //                 <Col md={3}>
-            //                     <MovieCard key={movie._id} movie={movie} onMovieClick={newSelectedMovie => {this.setSelectedMovie(newSelectedMovie); }} />
-            //                 </Col>
-            //             ))
-            //         }
-            //     </Row>
-            // </Container>
         );
     }
 }
-
-
-// import React from 'react';
-// import axios from 'axios';
-
-// import { LoginView } from '../login-view/login-view';
-// import { MovieView } from '../movie-view/movie-view';
-// import { MovieCard } from '../movie-card/movie-card';
-
-// export class MainView extends React.Component {
-//     constructor() {
-//         super();
-//         this.state= {
-//             movies: [],
-//             selectedMovie: null
-//         };
-//     }
-
-//     componentDidMount(){
-//         axios.get('https://nixflix-93.herokuapp.com/movies')
-//             .then(response => {
-//                 this.setState({
-//                     movies: response.data
-//                 });
-//             })
-//             .catch(error => {
-//                 console.log(error);
-//             });
-//     }
-
-//     setSelectedMovie(newSelectedMovie) {
-//         this.setState({
-//             selectedMovie: newSelectedMovie
-//         });
-//     }
-
-//     onLoggedIn(user) {
-//         this.setState({
-//             user
-//         });
-//     }
-
-//     render() {
-//         const { movies, selectedMovie } = this.state;
-
-//         if (!user) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
-
-//         if (movies.length === 0) return <div className="main-view" />;
-
-//         return (
-//             <div className="main-view">
-//                 {selectedMovie
-//                     ? <MovieView movie={selectedMovie} onBackClick={newSelectedMovie => { this.setSelectedMovie(newSelectedMovie); }} />
-
-//                     : movies.map(movie => (
-//                         <MovieCard key={movie._id} movie={movie} onMovieClick={(movie) => { this.setSelectedMovie(movie) }} />
-//                     ))
-//                 }
-//             </div>
-//         );
-//     }
-// }
