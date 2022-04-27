@@ -18,15 +18,13 @@ export class MainView extends React.Component {
     }
 
     componentDidMount(){
-        axios.get('https://nixflix-93.herokuapp.com/movies')
-            .then(response => {
-                this.setState({
-                    movies: response.data
-                });
-            })
-            .catch(error => {
-                console.log(error);
+        let accessToken = localStorage.getItem('token');
+        if (accessToken !== null) {
+            this.setState({
+                user: localStorage.getItem('user')
             });
+            this.getMovies(accessToken);
+        }
     }
 
     //When a movie is clicked, function is invoked and updates
@@ -38,7 +36,7 @@ export class MainView extends React.Component {
     }
 
     getMovies(token) {
-        axios.get('https://nixflix-93.herokuapp.com/login', {
+        axios.get('https://nixflix-93.herokuapp.com/movies', {
             headers: { Authorization:`Bearer ${token}`}
         })
         .then(response => {
@@ -65,6 +63,15 @@ export class MainView extends React.Component {
         this.getMovies(authData.token);
     }
 
+    //User logout
+    onLoggedOut() {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        this.setState({
+            user: null
+        });
+    }
+
     render() {
         const { movies, selectedMovie, user } = this.state;
 
@@ -78,6 +85,7 @@ export class MainView extends React.Component {
 
         return (
             <Container>
+                <button onClick={() => { this.onLoggedOut() }}>Logout</button>
                 <Row className="main-view justify-content-md-center">
                     {selectedMovie
                         ?   (
