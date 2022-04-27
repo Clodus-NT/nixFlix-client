@@ -37,12 +37,32 @@ export class MainView extends React.Component {
         });
     }
 
+    getMovies(token) {
+        axios.get('https://nixflix-93.herokuapp.com/login', {
+            headers: { Authorization:`Bearer ${token}`}
+        })
+        .then(response => {
+            //Assign result of state
+            this.setState({
+                movies: response.data
+            });
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    }
+
     //On succesful login, function updates the user property in 
     //state to that user
-    onLoggedIn(user) {
+    onLoggedIn(authData) {
+        console.log(authData);
         this.setState({
-            user
+            user: authData.user.Username
         });
+
+        localStorage.setItem('token', authData.token);
+        localStorage.setItem('user', authData.user.Username);
+        this.getMovies(authData.token);
     }
 
     render() {

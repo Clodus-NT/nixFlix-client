@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {Form, Button, Card, Cardgroup, Container, Col, Row, CardGroup } from 'react-bootstrap';
+import axios from 'axios';
 import './login-view.scss';
 
 export function LoginView(props) {
@@ -10,9 +11,19 @@ export function LoginView(props) {
     //then calls props.onLoggedIn(username)
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(username, password);
-        props.onLoggedIn(username);
-    }
+        //Sends authentication request to server
+        axios.post('https://nixflix-93.herokuapp.com/login', {
+            Username: username,
+            Password: password
+        })
+        .then(response => {
+            const data = response.data;
+            props.onLoggedIn(data);
+        })
+        .catch(e => {
+            console.log('no such user');
+        });
+    };
 
     return (
         <Container id='login-view-container'>
