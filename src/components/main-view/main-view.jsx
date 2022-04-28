@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 
 import { MenuBar } from '../navbar/navbar';
 import { LoginView } from '../login-view/login-view';
@@ -8,6 +8,7 @@ import { RegistrationView } from '../registration-view/registration-view';
 import { MovieView } from '../movie-view/movie-view';
 import { MovieCard } from '../movie-card/movie-card';
 import { Container, Col, Row } from 'react-bootstrap';
+
 import './main-view.scss';
 
 export class MainView extends React.Component {
@@ -15,7 +16,6 @@ export class MainView extends React.Component {
         super();
         this.state= {
             movies: [],
-            // selectedMovie: null,
             user: null
         };
     }
@@ -76,7 +76,7 @@ export class MainView extends React.Component {
     }
 
     render() {
-        const { movies, selectedMovie, user } = this.state;
+        const { movies, user } = this.state;
 
         //If no user, render LoginView
         //If there is a user logged in, user details are passed
@@ -92,14 +92,10 @@ export class MainView extends React.Component {
                 <Container>
                 <Row className="main-view justify-content-md-center">
 
-                    <Route path="/register" render={() => {
-                        if (user) return <Redirect to="/" />
-                        return <Col lg={8} md={8}>
-                            <RegistrationView />
-                        </Col>
-                    }} />
-
                     <Route exact path="/" render={() => {
+                        if (!user) return <Col>
+                            <LoginView onLoggedIn={user => this.onLoggedIn(user)} />
+                        </Col>
                         return movies.map(m => (
                             <Col md={3} key={m._id}>
                                 <MovieCard movie={m} />
@@ -107,16 +103,40 @@ export class MainView extends React.Component {
                         ))
                     }} />
 
+                    <Route path="/register" render={() => {
+                        if (user) return <Redirect to="/" />
+                        return <Col lg={8} md={8}>
+                            <RegistrationView />
+                        </Col>
+                    }} />
+
                     <Route path="/movies/:movieId" render={({ match, history }) => {
+                        if (!user) return <Col>
+                            <LoginView onLoggedIn={user => this.onLoggedIn(user)} />
+                        </Col>
+
                         return <Col md={8}>
                             <MovieView movie={movies.find(m => m._id === match.params.movieId)} onBackClick={() => history.goBack()} />
                         </Col>
                     }} />
 
                     <Route path="/movies/director/:name" render={( { match, history }) => {
+                        if (!user) return <Col>
+                            <LoginView onLoggedIn={user => this.onLoggedIn(user)} />
+                        </Col>
+                        {/* if (movies.length === 0) return <div className="main-view" />; */}
                         if (!user) return <Redirect to="/" />
-                        return <Col>
-                            <DirectorView movie={movies.find(m => m._id === match.params.movieId )} onBackClick={() => history.goBack()} />
+                        return <Col md={8} >
+                            <DirectorView director={movies.find(m => m.Director.Name === match.params.name).Director} onBackClick={() => history.goBack()} />
+                        </Col>
+                    }} />
+
+                    <Route path="/movies/genre/:name" render={({ match, history }) => {
+                        if (!user) return <Col>
+                            <LoginView onLoggedIn={user => this.onLoggedIn(user)} />
+                        </Col>
+                        return <Col md={8}>
+                            <GenreView genre={movies.find(m => m.Genre.Name === match.params.name).Genre} onBackClick={() => history.goBack()} />
                         </Col>
                     }} />
 

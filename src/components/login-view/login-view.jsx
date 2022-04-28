@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {Form, Button, Card, Cardgroup, Container, Col, Row, CardGroup } from 'react-bootstrap';
+import {Form, Button, Card, Container, Col, Row, CardGroup, Link } from 'react-bootstrap';
 import axios from 'axios';
 import './login-view.scss';
 
@@ -56,7 +56,8 @@ export function LoginView(props) {
                                         id='login-view-submit-button'
                                         variant="primary" 
                                         type="submit" 
-                                        onClick={handleSubmit}>Submit</Button>
+                                        onClick={handleSubmit}>Submit
+                                    </Button>
                                     {/* <Button>Register</Button> */}
                                 </Form>
                             </Card.Body>
