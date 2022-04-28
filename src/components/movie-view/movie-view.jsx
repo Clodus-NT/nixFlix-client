@@ -36,7 +36,6 @@ export class MovieView extends React.Component {
                                         <MovieView movie={movie.find(m => m._id === match.params.movieId)} onBackClick={() => history.goBack()} />
                                     </Col>
                                 }} />
-                                {/* <Button onClick={() => {onBackClick(null) }}>Back</Button> */}
                                 <Link to={`/directors/${movie.Director.Name}`} >
                                     <Button variant="link">Director Info</Button>
                                 </Link>

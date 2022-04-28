@@ -61,8 +61,8 @@
   margin-top: 10px;
 }
 
-* {
-  color: white;
+.director-view-container {
+  padding-top: 25px;
 }
 
 .my-flix {

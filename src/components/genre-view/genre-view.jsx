@@ -5,7 +5,10 @@ import "./genre-view.scss";
 
 export class GenreView extends React.Component {
     render() {
-        const { movie } = this.props;
+        const { genre } = this.props;
+
+        console.log("pizza")
+
 
         return (
             <Container>
@@ -13,8 +16,8 @@ export class GenreView extends React.Component {
                 <Col>
                     <Card>
                         <Card.Body>
-                            <Card.Title> {movie.Genre.Name} </Card.Title>
-                            <Card.Text>Description: {movie.Genre.Description} </Card.Text>
+                            <Card.Title> {genre?.Name} </Card.Title>
+                            <Card.Text>Description: {genre?.Description} </Card.Text>
                         </Card.Body>
                     </Card>
                 </Col>

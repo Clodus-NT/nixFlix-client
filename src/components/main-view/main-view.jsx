@@ -104,14 +104,14 @@ export class MainView extends React.Component {
                             </Col>
                         ))
                     }} />
-
+                        {/* RegistrationView */}
                     <Route path="/register" render={() => {
                         if (user) return <Redirect to="/" />
                         return <Col lg={8} md={8}>
                             <RegistrationView />
                         </Col>
                     }} />
-
+                        {/* MovieView */}
                     <Route path="/movies/:movieId" render={({ match, history }) => {
                         if (!user) return <Col>
                             <LoginView onLoggedIn={user => this.onLoggedIn(user)} />
@@ -121,7 +121,7 @@ export class MainView extends React.Component {
                             <MovieView movie={movies.find(m => m._id === match.params.movieId)} onBackClick={() => history.goBack()} />
                         </Col>
                     }} />
-                    
+                        {/* DirectorView */}
                     <Route path="/directors/:name" render={( { match, history }) => {
 
                         if (!user) return <Col><LoginView onLoggedIn={user => this.onLoggedIn(user)} /></Col>
@@ -132,23 +132,23 @@ export class MainView extends React.Component {
                             </Col>
                         )
                     }} />
-
-                    <Route path="/movies/genre/:name" render={({ match, history }) => {
+                        {/* GenreView */}
+                    <Route path="/genres/:name" render={({ match, history }) => {
                         if (!user) return <Col>
                             <LoginView onLoggedIn={user => this.onLoggedIn(user)} />
                         </Col>
                         return <Col md={8}>
-                            <GenreView genre={movies.find(m => m.Genre.Name === match.params.name).Genre} onBackClick={() => history.goBack()} />
+                            <GenreView genre={movies.find(m => m.Genre.Name === match.params.name)?.Genre} onBackClick={() => history.goBack()} />
                         </Col>
                     }} />
-
+                        {/* ProfileView */}
                     <Route path={`/users/${user}`} render={({ match, history }) => {
                         if (!user) return <Redirect to="/" />
                         return <Col>
                             <ProfileView movies={movies} user={user} onBackClick={() => history.goBack()} />
                         </Col>
                     }} />
-
+                        {/* UserUpdate */}
                     <Route path={`/user-update/${user}`} render={({ match, history}) => {
                         if (!user) return <Redirect to="/" />
                         return <Col>
