@@ -7,6 +7,7 @@ import { LoginView } from '../login-view/login-view';
 import { RegistrationView } from '../registration-view/registration-view';
 import { MovieView } from '../movie-view/movie-view';
 import { MovieCard } from '../movie-card/movie-card';
+import { DirectorView } from '../director-view/director-view';
 import { Container, Col, Row } from 'react-bootstrap';
 
 import './main-view.scss';

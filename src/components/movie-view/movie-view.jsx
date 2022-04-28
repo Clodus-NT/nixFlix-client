@@ -1,20 +1,20 @@
 import React from 'react';
-import {Button, Card, CardGroup, Container, Row, Col} from 'react-bootstrap';
+import {Button, Card, Container, Row, Col} from 'react-bootstrap';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import './movie-view.scss';
 
 export class MovieView extends React.Component {
-    keypressCallback(event) {
-        console.log(event.key);
-    }
+    // keypressCallback(event) {
+    //     console.log(event.key);
+    // }
 
-    componentDidMount() {
-        document.addEventListener('keypress', this.keypressCallback);
-    }
+    // componentDidMount() {
+    //     document.addEventListener('keypress', this.keypressCallback);
+    // }
 
-    componentWillUnmount() {
-        document.removeEventListener('keypress', this.keypressCallback);
-    }
+    // componentWillUnmount() {
+    //     document.removeEventListener('keypress', this.keypressCallback);
+    // }
 
     render () {
         const { movie, onBackClick } = this.props;
