@@ -10,7 +10,7 @@ export function RegistrationView(props) {
     // const [birthday, setBirthday] = useState('');
 
     const handleSubmit = (e) => {
-        // e.preventDefault();
+        e.preventDefault();
         // console.log(username, password);
         // props.onRegistration(username);
         axios.post('https://nixflix-93.herokuapp.com/users', {
