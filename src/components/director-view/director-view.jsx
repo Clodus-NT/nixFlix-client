@@ -5,7 +5,8 @@ import "./director-view.scss";
 
 export class DirectorView extends React.Component {
     render() {
-        const { movie } = this.props;
+
+        const { director } = this.props;
 
         return (
             <Container>
@@ -13,12 +14,9 @@ export class DirectorView extends React.Component {
                 <Col>
                     <Card>
                         <Card.Body>
-                            {/* <Card.Title>{movie.director.Name}</Card.Title>
-                            <Card.Text>Bio: {director.Bio}</Card.Text>
-                            <Card.Text>Birth: {director.Birth}</Card.Text> */}
-                            <Card.Text> {movie.Director.Name} </Card.Text>
-                            <Card.Text>Birth: {movie.Director.Birth} </Card.Text>
-                            <Card.Text>About the director: {movie.Director.Bio} </Card.Text>
+                            <Card.Title> {director?.Name} </Card.Title>
+                            <Card.Text>Born in: {director?.Birth} </Card.Text>
+                            <Card.Text>About the director: {director?.Bio} </Card.Text>
                         </Card.Body>
                     </Card>
                 </Col>
