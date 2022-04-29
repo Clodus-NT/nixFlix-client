@@ -32,7 +32,7 @@ export class ProfileView extends React.Component {
         .then(response => {
             this.setState({
                 Username: response.data.Username,
-                Password: response.data.Password,
+                // Password: response.data.Password,
                 Email: response.data.Email,
                 Birthday: response.data.Birthday,
                 FavoriteMovies: response.data.FavoriteMovies
@@ -118,7 +118,7 @@ export class ProfileView extends React.Component {
 
     setPassword(value) {
         this.setState({
-            Username: value
+            Password: value
         });
     }
 
@@ -138,11 +138,9 @@ export class ProfileView extends React.Component {
         const { movies } = this.props;
         const { FavoriteMovies, Username, Password, Email, Birthday } = this.state;
 
-        console.log("pizza");
-
-        if (!Username) {
-            return null;
-        }
+        // if (!Username && Username !== '') {
+        //     return null;
+        // }
 
         return (
             <Container>
@@ -170,7 +168,7 @@ export class ProfileView extends React.Component {
                                         name="username"
                                         placeholder="Enter a new username"
                                         value={Username}
-                                        onChange={(e) => this.setUsername(e.target.value)}
+                                        onChange={(e) => this.setUsername(e.target.value || '')}
                                         required />
                                 </FormGroup>
 
