@@ -9,7 +9,6 @@ export class GenreView extends React.Component {
 
         console.log("pizza")
 
-
         return (
             <Container>
             <Row>

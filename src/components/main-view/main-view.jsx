@@ -9,6 +9,7 @@ import { MovieView } from '../movie-view/movie-view';
 import { MovieCard } from '../movie-card/movie-card';
 import { DirectorView } from '../director-view/director-view';
 import { GenreView } from '../genre-view/genre-view'; 
+import { ProfileView } from '../profile-view/profile-view';
 import { Container, Col, Row } from 'react-bootstrap';
 
 import './main-view.scss';
@@ -142,19 +143,20 @@ export class MainView extends React.Component {
                         </Col>
                     }} />
                         {/* ProfileView */}
-                    <Route path={`/users/${user}`} render={({ match, history }) => {
+                    <Route path={`/users/${user}`} render={({ history }) => {
                         if (!user) return <Redirect to="/" />
                         return <Col>
                             <ProfileView movies={movies} user={user} onBackClick={() => history.goBack()} />
+                            {/* <ProfileView profile={users.find(p => p.User.Username === match.params.name)?.Users} onBackClick={() => history.goBack()} /> */}
                         </Col>
                     }} />
                         {/* UserUpdate */}
-                    <Route path={`/user-update/${user}`} render={({ match, history}) => {
+                    {/* <Route path={`/user-update/${user}`} render={({ match, history}) => {
                         if (!user) return <Redirect to="/" />
                         return <Col>
                             <UserUpdate user={user} onBackClick={() => history.goBack()} />
                         </Col>
-                    }} />
+                    }} /> */}
 
                 </Row>
                 </Container>
