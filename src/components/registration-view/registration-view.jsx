@@ -1,34 +1,79 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import { Form, Button, Card, Cardgroup, Container, Col, Row, CardGroup } from 'react-bootstrap';
 import './registration-view.scss'
 
-export function RegistrationView(props) {
+export function RegistrationView() {
+
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
-    // const [birthday, setBirthday] = useState('');
+    const [birthday, setBirthday] = useState('');
+
+    const [usernameErr, setUsernameErr] = useState('');
+    const [passwordErr, setPasswordErr] = useState('');
+    const [emailErr, setEmailErr] = useState('');
+    // const [birthdayErr, setBirthdayErr] = useState('');
+
+    const validate = () => {
+        let isReq = true;
+
+        if(!username){
+          setUsernameErr('Username required');
+          isReq = false;
+        } else if(username.length < 5){
+          setUsernameErr('Username must be 5 characters long');
+          isReq = false;
+        }
+    
+        if(!password){
+          setPasswordErr('Password Required');
+          isReq = false;
+        } else if(password.length < 6){
+          setPasswordErr('Password must be 6 characters long');
+          isReq = false;
+        }
+    
+        if(!email){
+          setEmailErr('Email Required');
+          isReq = false;
+        } else if(email.indexOf('@') === -1 ){
+          setEmailErr('You must enter a valid email address');
+          isReq = false;
+        }
+    
+        if(!birthday){
+          setBirthdayErr('Your birthday is required');
+          isReq = false;
+        }
+    
+        return isReq;
+      };
 
     const handleSubmit = (e) => {
-        e.preventDefault();
-        // console.log(username, password);
-        // props.onRegistration(username);
-        axios.post('https://nixflix-93.herokuapp.com/users', {
-            Username: username,
-            Password: password,
-            Email: email
-            // Birthday: birthday
-        })
-        .then(response => {
-            const data = response.data;
-            console.log(data);
-            //'_self' is needed so the page will open in the same tab
-            window.open('/', '_self');
-        })
-        .catch(e => {
-            console.log('error registering the user')
-        });
-    };
+        const isReq = validate();
+        if (isReq) {
+            axios.post('https://nixflix-93.herokuapp.com/login', {
+                Username: username,
+                Password: password,
+                Email: email,
+                Birthday: birthday
+            })
+            .then(response => {
+                const data = response.data;
+                console.log(data);
+                alert('Welcome to nifFlix! Please login.')
+                //_self keeps page from opening into a new tab
+                window.open('/', '_self');
+            })
+            .catch(response => {
+                console.error(response);
+                alert('Uh-oh! Something was entered incorrectly :(')
+            })
+        }
+    }
 
     return (
         <Container id='registration-view-container'>
@@ -52,6 +97,7 @@ export function RegistrationView(props) {
                                             required
                                             placeholder="Enter a valid email address"
                                         />
+                                        {emailErr && <p>{emailErr}</p>}
                                     </Form.Group>
 
                                     <Form.Group>
@@ -64,9 +110,10 @@ export function RegistrationView(props) {
                                             onChange={e => setUsername(e.target.value)} required
                                             placeholder="Choose a username"
                                             />
+                                        {usernameErr && <p>{usernameErr}</p>}
                                     </Form.Group>
 
-                                    {/* <Form.Group>
+                                    <Form.Group>
                                         <Form.Label>
                                             Birthday: 
                                         </Form.Label>
@@ -77,7 +124,7 @@ export function RegistrationView(props) {
                                             required
                                             placeholder="Enter your birthday"
                                         />
-                                    </Form.Group> */}
+                                    </Form.Group>
 
                                     <Form.Group>
                                         <Form.Label>
@@ -89,8 +136,14 @@ export function RegistrationView(props) {
                                                 onChange={e => setPassword(e.target.value)} required
                                                 placeholder="Choose a password"
                                             />
+                                            {passwordErr && <p>{passwordErr}</p>}
                                     </Form.Group>
-                                    <Button id='registration-view-button' type="submit" variant="primary" onClick={handleSubmit}>Register</Button>
+                                    <Button 
+                                        id='registration-view-button' type="submit" 
+                                        variant="primary" 
+                                        onClick={handleSubmit}>
+                                            Register
+                                    </Button>
                                 </Form>
                             </Card.Body>
                         </Card>
@@ -100,3 +153,12 @@ export function RegistrationView(props) {
         </Container>
     )
 }
+
+RegistrationView.PropTypes = {
+    register: PropTypes.shape({
+        Username: PropTypes.string.isRequired,
+        Password: PropTypes.string.isRequired,
+        Email: PropTypes.string.isRequired,
+        Birthday: PropTypes.number.isRequired
+    })
+};

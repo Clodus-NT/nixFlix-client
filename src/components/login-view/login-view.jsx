@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {Form, Button, Card, Container, Col, Row, CardGroup} from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import axios from 'axios';
 import './login-view.scss';
 
@@ -8,22 +8,49 @@ export function LoginView(props) {
     const [ username, setUsername ] = useState('');
     const [ password, setPassword ] = useState('');
 
+    const [ usernameErr, setUsernameErr ] = useState('');
+    const [ passwordErr, setPasswordErr ] = useState('');
+
+    const validate = () => {
+        let isReq = true;
+        if(!username){
+            setUsernameErr('Username required');
+            isReq = false;
+        } else if(username.length < 5){
+            setUsernameErr('Username must be 5 characters long');
+            isReq = false;
+        }
+      
+        if(!password){
+            setPasswordErr('Password Required');
+            isReq = false;
+        } else if(password.length < 6){
+            setPasswordErr('Password must be 6 characters long');
+            isReq = false;
+        }
+
+        return isReq;
+    }
+
     //Requests server for authentication
     //then calls props.onLoggedIn(username)
     const handleSubmit = (e) => {
         e.preventDefault();
-        //Sends authentication request to server
-        axios.post('https://nixflix-93.herokuapp.com/login', {
-            Username: username,
-            Password: password
-        })
-        .then(response => {
-            const data = response.data;
-            props.onLoggedIn(data);
-        })
-        .catch(e => {
-            console.log('no such user');
-        });
+        const isReq = validate();
+
+        if(isReq) {
+            axios.post('https://nixflix-93.herokuapp.com/login', {
+                Username: username,
+                Password: password
+            })
+            .then(response => {
+                const data = response.data;
+                props.onLoggedIn(data);
+            })
+            .catch(e => {
+                console.log('no such user')
+            });
+        }
     };
 
     return (
@@ -41,8 +68,10 @@ export function LoginView(props) {
                                         <Form.Label>Username: </Form.Label>
                                         <Form.Control 
                                             type="text" 
+                                            value={username}
                                             onChange={e => setUsername(e.target.value)}
                                             placeholder="Enter your username" />
+                                            {usernameErr && <p>{usernameErr}</p>}
                                     </Form.Group>
 
                                     <Form.Group controlId="formPassword">
@@ -52,34 +81,29 @@ export function LoginView(props) {
                                             onChange={e => setPassword(e.target.value)}
                                             placeholder="Enter your username"
                                         />
+                                        {passwordErr && <p>{passwordErr}</p>}
                                     </Form.Group>
+                                    <br></br>
                                     <Button 
                                         id='login-view-submit-button'
                                         variant="primary" 
                                         type="submit" 
                                         onClick={handleSubmit}>Submit
                                     </Button>
-                                    {/* <Button>Register</Button> */}
-                                    {/* <Link to="/register">Click here to register</Link> */}
                                 </Form>
+                                {/* <Link to={`/register`}>
+                                    <Button variant="link">Register</Button>
+                                </Link> */}
                             </Card.Body>
+                            <Router>
+                            <Link to={`/register`}>
+                                <Button variant="link">Sign-Up Here</Button>
+                            </Link>
+                            </Router>
                         </Card>
                     </CardGroup>
                 </Col>
             </Row>
         </Container>
-        
-        // <form>
-        //     <label>
-        //         Username: 
-        //         <input type="text" value={username} onChange={e => setUsername(e.target.value)} />
-        //     </label>
-        //     <label>
-        //         Password:
-        //         <input type="password" value={password} onChange={e => setPassword(e.target.value)} />
-        //     </label>
-        //     <button type="submit" onClick={handleSubmit}>Submit</button>
-        //     <button type="button" onClick={handleSubmit}>Register</button>
-        // </form>
     )
 }

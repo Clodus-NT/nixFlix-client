@@ -94,7 +94,7 @@ export class MainView extends React.Component {
                 <MenuBar user={user} />
                 <Container>
                 <Row className="main-view justify-content-md-center">
-
+                        {/* Login */}
                     <Route exact path="/" render={() => {
                         if (!user) return <Col>
                             <LoginView onLoggedIn={user => this.onLoggedIn(user)} />
@@ -106,12 +106,17 @@ export class MainView extends React.Component {
                         ))
                     }} />
                         {/* RegistrationView */}
-                    <Route path="/register" render={() => {
-                        if (user) return <Redirect to="/" />
-                        return <Col lg={8} md={8}>
-                            <RegistrationView />
-                        </Col>
+                    <Route pas="/register" render={() => {
+                        if(user) {
+                            <Redirect to="/" />
+                        }
+                        return (
+                            <Col lg={8} md={8}>
+                                <RegistrationView />
+                            </Col>
+                        )
                     }} />
+
                         {/* MovieView */}
                     <Route path="/movies/:movieId" render={({ match, history }) => {
                         if (!user) return <Col>
@@ -150,14 +155,6 @@ export class MainView extends React.Component {
                             {/* <ProfileView profile={users.find(p => p.User.Username === match.params.name)?.Users} onBackClick={() => history.goBack()} /> */}
                         </Col>
                     }} />
-                        {/* UserUpdate */}
-                    {/* <Route path={`/user-update/${user}`} render={({ match, history}) => {
-                        if (!user) return <Redirect to="/" />
-                        return <Col>
-                            <UserUpdate user={user} onBackClick={() => history.goBack()} />
-                        </Col>
-                    }} /> */}
-
                 </Row>
                 </Container>
             </Router>

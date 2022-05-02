@@ -43,6 +43,7 @@ export class ProfileView extends React.Component {
         });
     }
 
+
     //Sends a PUT request to API and the response sets the state to update user info.
     //console.log message indicates success
     updateUser = (e) => {
@@ -75,22 +76,27 @@ export class ProfileView extends React.Component {
     }
 
     //Sends a DELETE request to API and console.log message indicates success
-    removeFavorite = (e, movies) => {
+    removeFavorite(e, movie) {
         e.preventDefault();
-        const Username = localStorage.getItem('user');
-        const token = localStorage.getItem('token');
-
-        axios.delete(`https://nixflix-93.herokuapp.com/users/${Username}/movies/${movie._id}`, {
-            headers: { Authorization: `Bearer ${token}`}
-        })
-        .then(() => {
-            console.log("Movie has been removed from favorites");
-            this.componentDidMount();
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
-    }
+    
+        const username = localStorage.getItem("user");
+        const token = localStorage.getItem("token");
+    
+        axios
+          .delete(
+            `https://nix-flix-93.herokuapp.com/users/${username}/Movies/${movie}`,
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          )
+          .then(() => {
+            console.log(`${movie.Title} was removed from your favorite`);
+            window.open("/users/:username", "__self");
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
 
     //Sends DELETE request to API and console.log message indicates success
     removeUser() {
@@ -137,10 +143,6 @@ export class ProfileView extends React.Component {
     render() {
         const { movies } = this.props;
         const { FavoriteMovies, Username, Password, Email, Birthday } = this.state;
-
-        // if (!Username && Username !== '') {
-        //     return null;
-        // }
 
         return (
             <Container>
@@ -245,7 +247,7 @@ export class ProfileView extends React.Component {
                                                     <Card.Title className="movie-title">
                                                         {movie.Title}
                                                     </Card.Title>
-                                                    <Button value={movie._id} onClick={(e) => this.onRemoveFavorite(e, movie)}>
+                                                    <Button value={movie._id} onClick={(e) => this.removeFavorite(e, movie)}>
                                                         Remove from Favorites
                                                     </Button>
                                                     </Card.Body>
