@@ -43,12 +43,7 @@ export function RegistrationView() {
           setEmailErr('You must enter a valid email address');
           isReq = false;
         }
-    
-        if(!birthday){
-          setBirthdayErr('Your birthday is required');
-          isReq = false;
-        }
-    
+
         return isReq;
       };
 
@@ -122,7 +117,6 @@ export function RegistrationView() {
                                             value={birthday}
                                             onChange={e => setBirthday(e.target.value)}
                                             required
-                                            // placeholder="Enter your birthday"
                                         />
                                     </Form.Group>
 
