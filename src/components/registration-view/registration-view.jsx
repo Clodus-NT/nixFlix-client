@@ -52,10 +52,10 @@ export function RegistrationView() {
         return isReq;
       };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = () => {
         const isReq = validate();
         if (isReq) {
-            axios.post('https://nixflix-93.herokuapp.com/login', {
+            axios.post('https://nixflix-93.herokuapp.com/users', {
                 Username: username,
                 Password: password,
                 Email: email,
@@ -64,7 +64,7 @@ export function RegistrationView() {
             .then(response => {
                 const data = response.data;
                 console.log(data);
-                alert('Welcome to nifFlix! Please login.')
+                alert('Welcome to nixFlix! Please login.')
                 //_self keeps page from opening into a new tab
                 window.open('/', '_self');
             })
@@ -118,11 +118,11 @@ export function RegistrationView() {
                                             Birthday: 
                                         </Form.Label>
                                         <Form.Control
-                                            type="text"
+                                            type="date"
                                             value={birthday}
                                             onChange={e => setBirthday(e.target.value)}
                                             required
-                                            placeholder="Enter your birthday"
+                                            // placeholder="Enter your birthday"
                                         />
                                     </Form.Group>
 
@@ -154,7 +154,7 @@ export function RegistrationView() {
     )
 }
 
-RegistrationView.PropTypes = {
+RegistrationView.propTypes = {
     register: PropTypes.shape({
         Username: PropTypes.string.isRequired,
         Password: PropTypes.string.isRequired,

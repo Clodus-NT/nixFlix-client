@@ -95,11 +95,11 @@ export function LoginView(props) {
                                     <Button variant="link">Register</Button>
                                 </Link> */}
                             </Card.Body>
-                            <Router>
+                            
                             <Link to={`/register`}>
                                 <Button variant="link">Sign-Up Here</Button>
                             </Link>
-                            </Router>
+                            
                         </Card>
                     </CardGroup>
                 </Col>
