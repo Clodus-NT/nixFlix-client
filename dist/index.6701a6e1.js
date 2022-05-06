@@ -3887,17 +3887,6 @@ class MovieView extends _reactDefault.default.Component {
                                         __self: this,
                                         children: "Genre Info"
                                     })
-                                }),
-                                /*#__PURE__*/ _jsxRuntime.jsx(_reactBootstrap.Button, {
-                                    variant: "primary",
-                                    className: "custom-btn",
-                                    onClick: this.addFavorite,
-                                    __source: {
-                                        fileName: "src/components/movie-view/movie-view.jsx",
-                                        lineNumber: 34
-                                    },
-                                    __self: this,
-                                    children: "Add to favorites"
                                 })
                             ]
                         })
@@ -40609,7 +40598,6 @@ class DirectorView extends _reactDefault.default.Component {
     render() {
         const { director  } = this.props;
         return(/*#__PURE__*/ _jsxRuntime.jsx(_reactBootstrap.Container, {
-            id: "director-view-container",
             __source: {
                 fileName: "src/components/director-view/director-view.jsx",
                 lineNumber: 12

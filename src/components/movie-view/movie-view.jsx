@@ -31,13 +31,13 @@ export class MovieView extends React.Component {
                                 <Link to={`/genres/${movie.Genre.Name}`}>
                                     <Button variant="link">Genre Info</Button>
                                 </Link>
-                                <Button
+                                {/* <Button
                                     variant="primary"
                                     className="custom-btn"
                                     onClick={this.addFavorite}
                                 >
                                     Add to favorites
-                                </Button>
+                                </Button> */}
                             </Card.Body>
                         </Card>
                     </Col>

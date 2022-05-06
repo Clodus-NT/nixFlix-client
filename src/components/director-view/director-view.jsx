@@ -9,7 +9,7 @@ export class DirectorView extends React.Component {
         const { director } = this.props;
 
         return (
-            <Container id="director-view-container">
+            <Container>
             <Row>
                 <Col>
                     <Card>
