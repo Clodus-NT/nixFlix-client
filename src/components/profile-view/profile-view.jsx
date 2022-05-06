@@ -148,7 +148,7 @@ export class ProfileView extends React.Component {
             <Container>
             <Row>
                 <Col>
-                    <Card>
+                    <Card id="update-profile-card">
                         <Card.Body>
                             <Card.Title>Your Profile</Card.Title>
                             {/* <Card.Text>All fields are required to update your information</Card.Text> */}
@@ -209,13 +209,16 @@ export class ProfileView extends React.Component {
                                         onChange={(e) => this.setBirthday(e.target.value)}
                                         required />
                                 </FormGroup>
+                                <br></br>
                                 <Button 
-                                    variant="success"
+                                    id="update-user-button"
+                                    variant="primary"
                                     type="submit"
                                     onClick={this.updateUser}>
                                         Update User Info
                                 </Button>
                                 <Button 
+                                    id="delete-profile-button"
                                     variant="secondary"
                                     onClick={() => this.removeUser()}>
                                         Delete Profile
@@ -227,9 +230,11 @@ export class ProfileView extends React.Component {
                 </Col>
             </Row>
             <Row>
-                <Col>
+                <Col id="fav-movie-card-col">
                     <Card>
+                        
                         <Card.Body>
+                            <Card.Title id="fav-movie-card-title">Your Favorite Movies</Card.Title>
                             {FavoriteMovies.length === 0 && (
                                 <div>You haven't added any movies to your favorites list :(</div>
                             )}
@@ -237,8 +242,9 @@ export class ProfileView extends React.Component {
                                 {FavoriteMovies.length > 0 && movies.map((movie) => {
                                     if (movie._id === FavoriteMovies.find((fav) => fav === movie._id)) {
                                         return (
-                                            <Card className="favorite-movie" key={movie._id} >
+                                            <Card id="fav-movie-card-card" key={movie._id}  className="mx-auto">
                                                 <Card.Img
+                                                    id="fav-movie-img"
                                                     className="favorite-movie-image"
                                                     variant="top"
                                                     src={movie.ImagePath}
@@ -260,7 +266,7 @@ export class ProfileView extends React.Component {
                     </Card>
                 </Col>
             </Row>
-            </Container>
+        </Container>
         )
     }
 }
