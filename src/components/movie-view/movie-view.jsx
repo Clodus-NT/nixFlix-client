@@ -6,25 +6,73 @@ import './movie-view.scss';
 
 export class MovieView extends React.Component {
 
+    removeFromFavorite = (event) => {
+        event.preventDefault()
+        console.log('adding to foavorite: ', this.props.movie, this.props.user)
+    
+        const username = localStorage.getItem("user");
+        const token = localStorage.getItem("token");
+        console.log('remove', token)
+    
+        axios
+          .delete(
+            `https://nixflix-93.herokuapp.com/users/${username}/movies/${this.props.movie._id}`,
+            {
+              headers: { Authorization:`Bearer ${token}`}
+            }
+          )
+          .then(() => {
+            alert(`${this.props.movie.Title} was removed to your favorites list`);
+          })
+          .catch((err) => {
+            console.log(err);
+      })
+    }
+
+    addFavorite = (event) => {
+        event.preventDefault()
+        console.log('adding to foavorite: ', this.props.movie, this.props.user)
+    
+        const username = localStorage.getItem("user");
+        const token = localStorage.getItem("token");
+        console.log('movie view:', token)
+    
+        axios
+          .post(
+            `https://nixflix-93.herokuapp.com/users/${username}/movies/${this.props.movie._id}`, {},
+            {
+              headers: { Authorization:`Bearer ${token}`}
+            }
+          )
+          .then(() => {
+            alert(`${this.props.movie.Title} was added to your favorites list`);
+          })
+          .catch((err) => {
+            console.log(err);
+      })
+    }
+
     render () {
         const { movie } = this.props;
+        const isMovieAFavorite = theis.props.user.FavoriteMovies.includes(this.props.movieId);
 
-        const addFavorite = (e, movie) => {
-            e.preventDefault();
+        const addFavorite = (event) => {
+            event.preventDefault();
         
             const username = localStorage.getItem("user");
             const token = localStorage.getItem("token");
+
+            console.log(movie);
         
             axios
               .post(
-                `https://nix-flix-93.herokuapp.com/users/${username}/Movies/${movie}`,
+                `https://nixflix-93.herokuapp.com/users/${username}/movies/${movie._id}`,
                 {
                   headers: { Authorization: `Bearer ${token}` },
                 }
               )
               .then(() => {
-                alert(`${movie.Title} was removed from your favorites list`);
-                window.open("/users/:username", "__self");
+                alert(`${movie.Title} was added to your favorites list`);
               })
               .catch((err) => {
                 console.log(err);
@@ -43,17 +91,12 @@ export class MovieView extends React.Component {
                                 <Card.Text>Synopsis: {movie.Description} </Card.Text>
                                 <Card.Text>Director: {movie.Director.Name} </Card.Text>
                                 <Card.Text> About the director: {movie.Director.Bio} </Card.Text>
-                                <Route path=".movies/:movieId" render={({ match, history }) => {
-                                    return <Col md={8}>
-                                        <MovieView movie={movie.find(m => m._id === match.params.movieId)} onBackClick={() => history.goBack()} />
-                                    </Col>
-                                }} />
                                 <Button
                                     variant="primary"
                                     className="custom-btn"
-                                    onClick={addFavorite}
+                                    onClick={(event) => isMovieAFavorite ? this.removeFromFavorite(event) : this.addFavorite(event)}
                                 >
-                                    Add to favorites
+                                    { isMovieAFavorite ? 'Remove From Favorites' : 'Add To Favorites'}
                                 </Button>
                                 <Link to={`/directors/${movie.Director.Name}`} >
                                     <Button variant="link">Director Info</Button>

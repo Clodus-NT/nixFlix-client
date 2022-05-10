@@ -14,22 +14,36 @@ import { Container, Col, Row } from 'react-bootstrap';
 
 import './main-view.scss';
 
+
 export class MainView extends React.Component {
     constructor() {
         super();
         this.state= {
             movies: [],
-            user: null
+            user: null,
+            fullUser: {}
         };
     }
 
     componentDidMount(){
-        let accessToken = localStorage.getItem('token');
+        const accessToken = localStorage.getItem('token');
+        const user = localStorage.getItem('user');
+
         if (accessToken !== null) {
-            this.setState({
-                user: localStorage.getItem('user')
+            axios.get(`https://nixflix-93.herokuapp.com/users/${user}`, {
+                headers: { Authorization: `Bearer ${accessToken}`}
+            })
+            .then(res => {
+                const fullUser = res.data;
+                this.setState({
+                    fullUser: fullUser,
+                    user: localStorage.getItem('user')
+                })
+                this.getMovies(accessToken);
+            })
+            .catch(function (error) {
+                console.log(error)
             });
-            this.getMovies(accessToken);
         }
     }
 
@@ -79,6 +93,8 @@ export class MainView extends React.Component {
     }
 
     render() {
+        if (!this.state) return <>loading</>
+
         const { movies, user } = this.state;
 
         //If no user, render LoginView
@@ -123,7 +139,7 @@ export class MainView extends React.Component {
                         </Col>
 
                         return <Col md={8}>
-                            <MovieView movie={movies.find(m => m._id === match.params.movieId)} onBackClick={() => history.goBack()} />
+                            <MovieView user={this.state?.fullUser} movie={movies.find(m => m._id === match.params.movieId)} onBackClick={() => history.goBack()} />
                         </Col>
                     }} />
                         {/* DirectorView */}

@@ -81,7 +81,9 @@ export class ProfileView extends React.Component {
     
         const username = localStorage.getItem("user");
         const token = localStorage.getItem("token");
-    
+        
+        console.log(movie);
+
         axios
           .delete(
             `https://nix-flix-93.herokuapp.com/users/${username}/Movies/${movie}`,
