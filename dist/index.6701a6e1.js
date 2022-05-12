@@ -41651,7 +41651,7 @@ function setFilter(value) {
         value
     };
 }
-function setUser(value) {
+function setUser(user) {
     return {
         type: SET_USER,
         user
@@ -43650,7 +43650,7 @@ function movies(state = [], action) {
 function user(state = '', action) {
     switch(action.type){
         case _actions.SET_USER:
-            return action.user;
+            return action.value;
         default:
             return state;
     }
