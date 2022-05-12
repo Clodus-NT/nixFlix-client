@@ -156,10 +156,11 @@ class MainView extends React.Component {
                     }} />
                         {/* ProfileView */}
                     <Route path={`/users/${user}`} render={({ history }) => {
-                        if (!user) return <Redirect to="/" />
+                        //IF statement removed because it was causing issues with ProfileView
+                        //  if (!user) return <Redirect to="/"
+                        // />
                         return <Col>
                             <ProfileView movies={movies} user={user} onBackClick={() => history.goBack()} />
-                            {/* <ProfileView profile={users.find(p => p.User.Username === match.params.name)?.Users} onBackClick={() => history.goBack()} /> */}
                         </Col>
                     }} />
                 </Row>
