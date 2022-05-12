@@ -5,7 +5,14 @@ import { connect } from 'react-redux';
 
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 
-import { setMovies, setUser } from '../../actions/actions';
+import { 
+    setMovies, 
+    setUser,
+    regUser,
+    editUser,
+    addFavMovie,
+    remFavMovie
+    } from '../../actions/actions';
 
 import MoviesList from '../movies-list/movies-list';
 

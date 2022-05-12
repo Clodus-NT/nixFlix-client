@@ -3558,7 +3558,7 @@ class MainView extends _reactDefault.default.Component {
         return(/*#__PURE__*/ _jsxRuntime.jsxs(_reactRouterDom.BrowserRouter, {
             __source: {
                 fileName: "src/components/main-view/main-view.jsx",
-                lineNumber: 100
+                lineNumber: 107
             },
             __self: this,
             children: [
@@ -3566,21 +3566,21 @@ class MainView extends _reactDefault.default.Component {
                     user: user,
                     __source: {
                         fileName: "src/components/main-view/main-view.jsx",
-                        lineNumber: 101
+                        lineNumber: 108
                     },
                     __self: this
                 }),
                 /*#__PURE__*/ _jsxRuntime.jsx(_reactBootstrap.Container, {
                     __source: {
                         fileName: "src/components/main-view/main-view.jsx",
-                        lineNumber: 102
+                        lineNumber: 109
                     },
                     __self: this,
                     children: /*#__PURE__*/ _jsxRuntime.jsxs(_reactBootstrap.Row, {
                         className: "main-view justify-content-md-center",
                         __source: {
                             fileName: "src/components/main-view/main-view.jsx",
-                            lineNumber: 103
+                            lineNumber: 110
                         },
                         __self: this,
                         children: [
@@ -3604,7 +3604,7 @@ class MainView extends _reactDefault.default.Component {
                                 },
                                 __source: {
                                     fileName: "src/components/main-view/main-view.jsx",
-                                    lineNumber: 105
+                                    lineNumber: 112
                                 },
                                 __self: this
                             }),
@@ -3623,7 +3623,7 @@ class MainView extends _reactDefault.default.Component {
                                 },
                                 __source: {
                                     fileName: "src/components/main-view/main-view.jsx",
-                                    lineNumber: 117
+                                    lineNumber: 124
                                 },
                                 __self: this
                             }),
@@ -3646,7 +3646,7 @@ class MainView extends _reactDefault.default.Component {
                                 },
                                 __source: {
                                     fileName: "src/components/main-view/main-view.jsx",
-                                    lineNumber: 128
+                                    lineNumber: 135
                                 },
                                 __self: this
                             }),
@@ -3669,7 +3669,7 @@ class MainView extends _reactDefault.default.Component {
                                 },
                                 __source: {
                                     fileName: "src/components/main-view/main-view.jsx",
-                                    lineNumber: 138
+                                    lineNumber: 145
                                 },
                                 __self: this
                             }),
@@ -3692,7 +3692,7 @@ class MainView extends _reactDefault.default.Component {
                                 },
                                 __source: {
                                     fileName: "src/components/main-view/main-view.jsx",
-                                    lineNumber: 149
+                                    lineNumber: 156
                                 },
                                 __self: this
                             }),
@@ -3712,7 +3712,7 @@ class MainView extends _reactDefault.default.Component {
                                 },
                                 __source: {
                                     fileName: "src/components/main-view/main-view.jsx",
-                                    lineNumber: 158
+                                    lineNumber: 165
                                 },
                                 __self: this
                             })
@@ -41621,15 +41621,35 @@ parcelHelpers.export(exports, "SET_FILTER", ()=>SET_FILTER
 );
 parcelHelpers.export(exports, "SET_USER", ()=>SET_USER
 );
+parcelHelpers.export(exports, "REG_USER", ()=>REG_USER
+);
+parcelHelpers.export(exports, "EDIT_USER", ()=>EDIT_USER
+);
+parcelHelpers.export(exports, "ADD_FAVMOVIE", ()=>ADD_FAVMOVIE
+);
+parcelHelpers.export(exports, "REM_FAVMOVIE", ()=>REM_FAVMOVIE
+);
 parcelHelpers.export(exports, "setMovies", ()=>setMovies
 );
 parcelHelpers.export(exports, "setFilter", ()=>setFilter
 );
 parcelHelpers.export(exports, "setUser", ()=>setUser
 );
+parcelHelpers.export(exports, "regUser", ()=>regUser
+);
+parcelHelpers.export(exports, "editUser", ()=>editUser
+);
+parcelHelpers.export(exports, "addFavMovie", ()=>addFavMovie
+);
+parcelHelpers.export(exports, "remFavMovie", ()=>remFavMovie
+);
 const SET_MOVIES = 'SET_MOVIES';
 const SET_FILTER = 'SET_FILTER';
 const SET_USER = 'SET_USER';
+const REG_USER = 'REG_USER';
+const EDIT_USER = 'UPDATE_USER';
+const ADD_FAVMOVIE = 'ADD_FAVMOVIE';
+const REM_FAVMOVIE = 'REM_FAVMOVIE';
 function setMovies(value) {
     return {
         type: SET_MOVIES,
@@ -41646,6 +41666,30 @@ function setUser(user) {
     return {
         type: SET_USER,
         user: user?.Username
+    };
+}
+function regUser(value) {
+    return {
+        type: REG_USER,
+        value
+    };
+}
+function editUser(value) {
+    return {
+        type: EDIT_USER,
+        value
+    };
+}
+function addFavMovie(value) {
+    return {
+        type: ADD_FAVMOVIE,
+        value
+    };
+}
+function remFavMovie(value) {
+    return {
+        type: REM_FAVMOVIE,
+        value
     };
 }
 
@@ -43630,9 +43674,14 @@ function visibilityFilter(state = '', action) {
             return state;
     }
 }
+//Contains switch case for SET_MOVIES, ADD_FAVMOVIE, and REM_FAVMOVIE
 function movies(state = [], action) {
     switch(action.type){
         case _actions.SET_MOVIES:
+            return action.value;
+        case _actions.ADD_FAVMOVIE:
+            return action.value;
+        case _actions.REM_FAVMOVIE:
             return action.value;
         default:
             return state;
@@ -43646,10 +43695,28 @@ function user(state = '', action) {
             return state;
     }
 }
+function registerUser(state = '', action) {
+    switch(action.type){
+        case _actions.REG_USER:
+            return action.value;
+        default:
+            return state;
+    }
+}
+function editedUser(state = '', action) {
+    switch(action.type){
+        case _actions.EDIT_USER:
+            return action.value;
+        default:
+            return state;
+    }
+}
 const moviesApp = _redux.combineReducers({
     visibilityFilter,
     movies,
-    user
+    user,
+    registerUser,
+    editedUser
 });
 exports.default = moviesApp;
 
