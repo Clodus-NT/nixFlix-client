@@ -1,5 +1,6 @@
 import React from 'react';
 import Col from 'react-bootstrap/Col';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import VisibilityFilterInput from '../visibility-filter-input/visibility-filter-input';
@@ -31,5 +32,15 @@ function MoviesList(props) {
         ))}    
     </>
 }
+
+MoviesList.propTypes = {
+    movies: PropTypes.arrayOf(
+        PropTypes.shape({
+            filter: PropTypes.func
+        })
+    ),
+    visibilityFilter: PropTypes.string
+};
+
 
 export default connect(mapStateToProps)(MoviesList);

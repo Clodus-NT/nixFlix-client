@@ -1,6 +1,9 @@
 import React from 'react';
 import { Navbar, Container, Nav, Button } from 'react-bootstrap';
 
+import { connect } from 'react-redux';
+import { setUser } from '../../actions/actions';
+
 import './navbar.scss';
 
 export function MenuBar({user}) {
@@ -10,7 +13,7 @@ export function MenuBar({user}) {
     }
 
     const isAuth = () => {
-        if(typeof window == "undefigned") {
+        if(typeof window == "undefined") {
             return false;
         }
         if (localStorage.getItem("token")) {
@@ -46,3 +49,11 @@ export function MenuBar({user}) {
     );
 }
 
+let mapStateToProps = state => {
+    return {
+        movies: state.movies,
+        user: state.user
+    };
+}
+
+export default connect(mapStateToProps, { setUser })(MenuBar);

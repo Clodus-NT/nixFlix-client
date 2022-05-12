@@ -5,9 +5,10 @@ import { connect } from 'react-redux';
 
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 
-import { setMovies } from '../../actions/actions';
+import { setMovies, setUser } from '../../actions/actions';
 
 import MoviesList from '../movies-list/movies-list';
+
 
 import { MenuBar } from '../navbar/navbar';
 import { LoginView } from '../login-view/login-view';
@@ -33,9 +34,12 @@ class MainView extends React.Component {
     componentDidMount(){
         let accessToken = localStorage.getItem('token');
         if (accessToken !== null) {
-            this.setState({
-                user: localStorage.getItem('user')
-            });
+            const { setUser } = this.props;
+            setUser(localStorage.getItem('user'));
+
+            // this.setState({
+            //     user: localStorage.getItem('user')
+            // });
             this.getMovies(accessToken);
         }
     }
@@ -68,9 +72,10 @@ class MainView extends React.Component {
     //state to that user
     onLoggedIn(authData) {
         console.log(authData);
-        this.setState({
-            user: authData.user.Username
-        });
+        // this.setState({
+        //     user: authData.user.Username
+        // });
+        this.props.setUser(authData.user);
 
         localStorage.setItem('token', authData.token);
         localStorage.setItem('user', authData.user.Username);
@@ -88,8 +93,7 @@ class MainView extends React.Component {
 
     render() {
         // const { movies, user } = this.state;
-        let { movies } = this.props;
-        let { user } = this.state;
+        const { movies, user } = this.props;
 
         return (
             <Router>
@@ -165,7 +169,22 @@ class MainView extends React.Component {
 }
 
 let mapStateToProps = state => {
-    return { movies: state.movies }
+    return { 
+        movies: state.movies,
+        user: state.user
+    }
 }
 
-export default connect(mapStateToProps, { setMovies } ) (MainView);
+const mapDispatchToProps = dispatch => {
+    return {
+        setUser: (user) => {
+            dispatch(setUser(user))
+        },
+        setMovies: (movies) => {
+            dispatch(setMovies(movies))
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MainView);
+// export default connect(mapStateToProps, { setMovies, setUser })(MainView);
