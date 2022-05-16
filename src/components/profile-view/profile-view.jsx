@@ -1,20 +1,24 @@
 import React from 'react';
 import {Button, Card, Container, Row, Col, FormControl, FormGroup, Form} from 'react-bootstrap';
 import axios from 'axios';
+import PropTypes from 'prop-types';
+
+import { setUser, editUser } from '../../actions/actions';
 
 import "./profile-view.scss";
+import { connect } from 'react-redux';
 
 export class ProfileView extends React.Component {
     constructor() {
         super();
 
-        this.state = {
-            Username: null,
-            Password: null,
-            Email: null,
-            Birthday: null,
-            FavoriteMovies: []
-        };
+        // this.state = {
+        //     Username: null,
+        //     Password: null,
+        //     Email: null,
+        //     Birthday: null,
+        //     FavoriteMovies: []
+        // };
     }
 
     componentDidMount() {
@@ -62,7 +66,7 @@ export class ProfileView extends React.Component {
             headers: { Authorization: `Bearer ${token}`}
         })
         .then((response) => {
-            this.setState({
+            this.props.editUser({
                 Username: response.data.Username,
                 Password: response.data.Password,
                 Email: response.data.Password,
@@ -70,7 +74,7 @@ export class ProfileView extends React.Component {
             });
 
             localStorage.setItem('user', this.state.Username);
-            console.log("Profile has been updated!");
+            alert("Profile has been updated!");
             window.open('/profile', '_self');
         });
     }
@@ -142,7 +146,7 @@ export class ProfileView extends React.Component {
 
     render() {
         const { movies } = this.props;
-        const { FavoriteMovies, Username, Password, Email, Birthday } = this.state;
+        const { FavoriteMovies, Username, Password, Email, Birthday } = this.props;
 
         return (
             <Container>
@@ -270,3 +274,49 @@ export class ProfileView extends React.Component {
         )
     }
 }
+
+ProfileView.propTypes = {
+    movie: PropTypes.shape({
+        Title: PropTypes.string.isRequired,
+        Description: PropTypes.string.isRequired,
+        Genre: PropTypes.shape({
+            Name: PropTypes.string.isRequired,
+            Description: PropTypes.string.isRequired
+        }).isRequired,
+        Director: PropTypes.shape({
+            Name: PropTypes.string.isRequired,
+            Bio: PropTypes.string.isRequired
+        }).isRequired,
+        ImagePath: PropTypes.string.isRequired,
+        Featured: PropTypes.bool.isRequired
+    }).isRequired,
+    user: PropTypes.shape({
+        Username: PropTypes.string.isRequired,
+        Password: PropTypes.string.isRequired,
+        Email: PropTypes.string.isRequired,
+        Birthday: PropTypes.date,
+        FavoriteMovies: PropTypes.arrayOf(PropTypes.arrayOf.shape({
+            //Not sure how to do this
+        }))
+    }).isRequired
+}
+
+const mapStateToProps = (state) => {
+    return {
+        movies: state.movies,
+        user: state.user
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        setUser: (user) => {
+            dispatch(setUser(user))
+        },
+        editUser: (user) => {
+            dispatch(editUser(user))
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileView);
