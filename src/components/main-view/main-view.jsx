@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import { connect } from 'react-redux';
 
-import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Redirect } from 'react-router-dom';
 
 import { 
     setMovies, 
@@ -34,20 +34,39 @@ class MainView extends React.Component {
         super();
         this.state= {
             movies: [],
-            user: null
+            user: null,
+            fullUser: {}
         };
     }
 
     componentDidMount(){
-        let accessToken = localStorage.getItem('token');
+        const accessToken = localStorage.getItem('token');
+        const user = localStorage.getItem('user');
+        console.log(accessToken)
         if (accessToken !== null) {
-            const { setUser } = this.props;
-            setUser(localStorage.getItem('user'));
+            console.log('before axios')
+            axios.get(`https://nixflix-93.herokuapp.com/users/${user}`, {
+                headers: { Authorization: `Bearer ${accessToken}`}
+            })
+            .then(res => {
+                console.log(res)
+                const fullUser = res.data;
+                this.setState({
+                    fullUser: fullUser,
+                    user: localStorage.getItem('user')
+                })
+                this.getMovies(accessToken);
+            })
+            .catch(function (error) {
+                console.log(error)
+            });
+            // const { setUser } = this.props;
+            // setUser(localStorage.getItem('user'));
 
-            // this.setState({
-            //     user: localStorage.getItem('user')
-            // });
-            this.getMovies(accessToken);
+            // // this.setState({
+            // //     user: localStorage.getItem('user')
+            // // });
+            // this.getMovies(accessToken);
         }
     }
 
@@ -60,15 +79,16 @@ class MainView extends React.Component {
     }
 
     getMovies(token) {
+        console.log('get movies', token)
         axios.get('https://nixflix-93.herokuapp.com/movies', {
             headers: { Authorization:`Bearer ${token}`}
         })
         .then(response => {
-            this.props.setMovies(response.data);
+            // this.props.setMovies(response.data);
             //Assign result of state
-        //     this.setState({
-        //         movies: response.data
-        //     });
+            this.setState({
+                movies: response.data
+            });
         })
         .catch(function (error) {
             console.log(error);
@@ -79,10 +99,10 @@ class MainView extends React.Component {
     //state to that user
     onLoggedIn(authData) {
         console.log(authData);
-        // this.setState({
-        //     user: authData.user.Username
-        // });
-        this.props.setUser(authData.user);
+        this.setState({
+            user: authData.user.Username
+        });
+        // this.props.setUser(authData.user);
 
         localStorage.setItem('token', authData.token);
         localStorage.setItem('user', authData.user.Username);
@@ -99,15 +119,24 @@ class MainView extends React.Component {
     }
 
     render() {
-        // const { movies, user } = this.state;
-        const { movies, user } = this.props;
+        if (!this.state) return <>loading...</>
+        const { movies, user } = this.state;
+        // const { movies, user } = this.props;
         console.log('logged in: ', user);
+        //If no user, render LoginView
+        //If there is a user logged in, user details are passed
+        //as a prop to LoginView
+        // if (!user) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
+
+        //Before movies have been loaded
+        // if (movies.length === 0) return <div className="main-view" />;
 
         return (
             <Router>
                 <MenuBar user={user} />
                 <Container>
                 <Row className="main-view justify-content-md-center">
+                    {/* <Routes> */}
                         {/* Login */}
                     <Route exact path="/" render={() => {
                         if (!user) return <Col>
@@ -138,9 +167,18 @@ class MainView extends React.Component {
                         </Col>
 
                         return <Col md={8}>
-                            <MovieView movie={movies.find(m => m._id === match.params.movieId)} onBackClick={() => history.goBack()} />
+                            <MovieView user={this.state?.fullUser} movie={movies.find(m => m._id === match.params.movieId)} onBackClick={() => history.goBack()} />
                         </Col>
                     }} />
+                    {/* <Route path="/movies/:movieId" render={({ match, history }) => {
+                        if (!user) return <Col>
+                            <LoginView onLoggedIn={user => this.onLoggedIn(user)} />
+                        </Col>
+
+                        return <Col md={8}>
+                            <MovieView movie={movies.find(m => m._id === match.params.movieId)} onBackClick={() => history.goBack()} />
+                        </Col>
+                    }} /> */}
                         {/* DirectorView */}
                     <Route path="/directors/:name" render={( { match, history }) => {
 
@@ -170,6 +208,7 @@ class MainView extends React.Component {
                             <ProfileView movies={movies} user={user} onBackClick={() => history.goBack()} />
                         </Col>
                     }} />
+                    {/* </Routes> */}
                 </Row>
                 </Container>
             </Router>

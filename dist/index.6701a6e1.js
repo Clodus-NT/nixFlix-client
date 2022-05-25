@@ -3495,18 +3495,38 @@ class MainView extends _reactDefault.default.Component {
         super();
         this.state = {
             movies: [],
-            user: null
+            user: null,
+            fullUser: {
+            }
         };
     }
     componentDidMount() {
-        let accessToken = localStorage.getItem('token');
+        const accessToken = localStorage.getItem('token');
+        const user = localStorage.getItem('user');
+        console.log(accessToken);
         if (accessToken !== null) {
-            const { setUser  } = this.props;
-            setUser(localStorage.getItem('user'));
-            // this.setState({
-            //     user: localStorage.getItem('user')
-            // });
-            this.getMovies(accessToken);
+            console.log('before axios');
+            _axiosDefault.default.get(`https://nixflix-93.herokuapp.com/users/${user}`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            }).then((res)=>{
+                console.log(res);
+                const fullUser = res.data;
+                this.setState({
+                    fullUser: fullUser,
+                    user: localStorage.getItem('user')
+                });
+                this.getMovies(accessToken);
+            }).catch(function(error) {
+                console.log(error);
+            });
+        // const { setUser } = this.props;
+        // setUser(localStorage.getItem('user'));
+        // // this.setState({
+        // //     user: localStorage.getItem('user')
+        // // });
+        // this.getMovies(accessToken);
         }
     }
     //When a movie is clicked, function is invoked and updates
@@ -3517,16 +3537,17 @@ class MainView extends _reactDefault.default.Component {
         });
     }
     getMovies(token) {
+        console.log('get movies', token);
         _axiosDefault.default.get('https://nixflix-93.herokuapp.com/movies', {
             headers: {
                 Authorization: `Bearer ${token}`
             }
         }).then((response)=>{
-            this.props.setMovies(response.data);
-        //Assign result of state
-        //     this.setState({
-        //         movies: response.data
-        //     });
+            // this.props.setMovies(response.data);
+            //Assign result of state
+            this.setState({
+                movies: response.data
+            });
         }).catch(function(error) {
             console.log(error);
         });
@@ -3535,10 +3556,10 @@ class MainView extends _reactDefault.default.Component {
     //state to that user
     onLoggedIn(authData) {
         console.log(authData);
-        // this.setState({
-        //     user: authData.user.Username
-        // });
-        this.props.setUser(authData.user);
+        this.setState({
+            user: authData.user.Username
+        });
+        // this.props.setUser(authData.user);
         localStorage.setItem('token', authData.token);
         localStorage.setItem('user', authData.user.Username);
         this.getMovies(authData.token);
@@ -3552,13 +3573,22 @@ class MainView extends _reactDefault.default.Component {
         });
     }
     render() {
-        // const { movies, user } = this.state;
-        const { movies , user  } = this.props;
+        if (!this.state) return(/*#__PURE__*/ _jsxRuntime.jsx(_jsxRuntime.Fragment, {
+            children: "loading..."
+        }));
+        const { movies , user  } = this.state;
+        // const { movies, user } = this.props;
         console.log('logged in: ', user);
+        //If no user, render LoginView
+        //If there is a user logged in, user details are passed
+        //as a prop to LoginView
+        // if (!user) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
+        //Before movies have been loaded
+        // if (movies.length === 0) return <div className="main-view" />;
         return(/*#__PURE__*/ _jsxRuntime.jsxs(_reactRouterDom.BrowserRouter, {
             __source: {
                 fileName: "src/components/main-view/main-view.jsx",
-                lineNumber: 107
+                lineNumber: 135
             },
             __self: this,
             children: [
@@ -3566,21 +3596,21 @@ class MainView extends _reactDefault.default.Component {
                     user: user,
                     __source: {
                         fileName: "src/components/main-view/main-view.jsx",
-                        lineNumber: 108
+                        lineNumber: 136
                     },
                     __self: this
                 }),
                 /*#__PURE__*/ _jsxRuntime.jsx(_reactBootstrap.Container, {
                     __source: {
                         fileName: "src/components/main-view/main-view.jsx",
-                        lineNumber: 109
+                        lineNumber: 137
                     },
                     __self: this,
                     children: /*#__PURE__*/ _jsxRuntime.jsxs(_reactBootstrap.Row, {
                         className: "main-view justify-content-md-center",
                         __source: {
                             fileName: "src/components/main-view/main-view.jsx",
-                            lineNumber: 110
+                            lineNumber: 138
                         },
                         __self: this,
                         children: [
@@ -3604,7 +3634,7 @@ class MainView extends _reactDefault.default.Component {
                                 },
                                 __source: {
                                     fileName: "src/components/main-view/main-view.jsx",
-                                    lineNumber: 112
+                                    lineNumber: 141
                                 },
                                 __self: this
                             }),
@@ -3623,7 +3653,7 @@ class MainView extends _reactDefault.default.Component {
                                 },
                                 __source: {
                                     fileName: "src/components/main-view/main-view.jsx",
-                                    lineNumber: 124
+                                    lineNumber: 153
                                 },
                                 __self: this
                             }),
@@ -3638,6 +3668,7 @@ class MainView extends _reactDefault.default.Component {
                                     return(/*#__PURE__*/ _jsxRuntime.jsx(_reactBootstrap.Col, {
                                         md: 8,
                                         children: /*#__PURE__*/ _jsxRuntime.jsx(_movieView.MovieView, {
+                                            user: this.state?.fullUser,
                                             movie: movies.find((m)=>m._id === match.params.movieId
                                             ),
                                             onBackClick: ()=>history.goBack()
@@ -3646,7 +3677,7 @@ class MainView extends _reactDefault.default.Component {
                                 },
                                 __source: {
                                     fileName: "src/components/main-view/main-view.jsx",
-                                    lineNumber: 135
+                                    lineNumber: 164
                                 },
                                 __self: this
                             }),
@@ -3669,7 +3700,7 @@ class MainView extends _reactDefault.default.Component {
                                 },
                                 __source: {
                                     fileName: "src/components/main-view/main-view.jsx",
-                                    lineNumber: 145
+                                    lineNumber: 183
                                 },
                                 __self: this
                             }),
@@ -3692,7 +3723,7 @@ class MainView extends _reactDefault.default.Component {
                                 },
                                 __source: {
                                     fileName: "src/components/main-view/main-view.jsx",
-                                    lineNumber: 156
+                                    lineNumber: 194
                                 },
                                 __self: this
                             }),
@@ -3712,7 +3743,7 @@ class MainView extends _reactDefault.default.Component {
                                 },
                                 __source: {
                                     fileName: "src/components/main-view/main-view.jsx",
-                                    lineNumber: 165
+                                    lineNumber: 203
                                 },
                                 __self: this
                             })
@@ -3766,51 +3797,91 @@ var _reactBootstrap = require("react-bootstrap");
 var _reactRouterDom = require("react-router-dom");
 var _movieViewScss = require("./movie-view.scss");
 class MovieView extends _reactDefault.default.Component {
+    removeFromFavorite = (event)=>{
+        event.preventDefault();
+        console.log('adding to favorite: ', this.props.movie, this.props.user);
+        const username = localStorage.getItem("user");
+        const token = localStorage.getItem("token");
+        console.log('remove', token);
+        _axiosDefault.default.delete(`https://nixflix-93.herokuapp.com/users/${username}/movies/${this.props.movie._id}`, {
+        }, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }).then(()=>{
+            alert(`${this.props.movie.Title} was removed from your favorites list`);
+        }).catch((err)=>{
+            console.log(err);
+        });
+    };
+    addFavorite = (event)=>{
+        event.preventDefault();
+        console.log('adding to favorite: ', this.props.movie, this.props.user);
+        const username = localStorage.getItem("user");
+        const token = localStorage.getItem("token");
+        console.log('movie view: ', token);
+        _axiosDefault.default.post(`https://nix-flix-93.herokuapp.com/users/${username}/Movies/${this.props.movie._id}`, {
+        }, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }).then(()=>{
+            alert(`${this.props.movie.Title} was added to your favorites list`);
+        }).catch((err)=>{
+            console.log(err);
+        });
+    };
     render() {
         const { movie  } = this.props;
-        const addFavorite = (e, movie1)=>{
-            e.preventDefault();
-            const username = localStorage.getItem("user");
-            const token = localStorage.getItem("token");
-            _axiosDefault.default.post(`https://nix-flix-93.herokuapp.com/users/${username}/Movies/${movie1}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }).then(()=>{
-                alert(`${movie1.Title} was removed from your favorites list`);
-                window.open("/users/:username", "__self");
-            }).catch((err)=>{
-                console.log(err);
-            });
-        };
+        const isMovieAFavorite = this.props.user.FavoriteMovies.includes(this.props.movie._id);
+        console.log('single movie view: ');
+        // const addFavorite = (e, movie) => {
+        //     e.preventDefault();
+        //     const username = localStorage.getItem("user");
+        //     const token = localStorage.getItem("token");
+        //     axios
+        //       .post(
+        //         `https://nix-flix-93.herokuapp.com/users/${username}/Movies/${movie}`,
+        //         {
+        //           headers: { Authorization: `Bearer ${token}` },
+        //         }
+        //       )
+        //       .then(() => {
+        //         alert(`${movie.Title} was removed from your favorites list`);
+        //         window.open("/users/:username", "__self");
+        //       })
+        //       .catch((err) => {
+        //         console.log(err);
+        //       });
+        //   }
         return(/*#__PURE__*/ _jsxRuntime.jsx(_reactBootstrap.Container, {
             __source: {
                 fileName: "src/components/movie-view/movie-view.jsx",
-                lineNumber: 35
+                lineNumber: 86
             },
             __self: this,
             children: /*#__PURE__*/ _jsxRuntime.jsx(_reactBootstrap.Row, {
                 __source: {
                     fileName: "src/components/movie-view/movie-view.jsx",
-                    lineNumber: 36
+                    lineNumber: 87
                 },
                 __self: this,
                 children: /*#__PURE__*/ _jsxRuntime.jsx(_reactBootstrap.Col, {
                     __source: {
                         fileName: "src/components/movie-view/movie-view.jsx",
-                        lineNumber: 37
+                        lineNumber: 88
                     },
                     __self: this,
                     children: /*#__PURE__*/ _jsxRuntime.jsx(_reactBootstrap.Card, {
                         __source: {
                             fileName: "src/components/movie-view/movie-view.jsx",
-                            lineNumber: 38
+                            lineNumber: 89
                         },
                         __self: this,
                         children: /*#__PURE__*/ _jsxRuntime.jsxs(_reactBootstrap.Card.Body, {
                             __source: {
                                 fileName: "src/components/movie-view/movie-view.jsx",
-                                lineNumber: 39
+                                lineNumber: 90
                             },
                             __self: this,
                             children: [
@@ -3819,14 +3890,14 @@ class MovieView extends _reactDefault.default.Component {
                                     src: movie.ImagePath,
                                     __source: {
                                         fileName: "src/components/movie-view/movie-view.jsx",
-                                        lineNumber: 40
+                                        lineNumber: 91
                                     },
                                     __self: this
                                 }),
                                 /*#__PURE__*/ _jsxRuntime.jsx(_reactBootstrap.Card.Title, {
                                     __source: {
                                         fileName: "src/components/movie-view/movie-view.jsx",
-                                        lineNumber: 41
+                                        lineNumber: 92
                                     },
                                     __self: this,
                                     children: movie.Title
@@ -3834,7 +3905,7 @@ class MovieView extends _reactDefault.default.Component {
                                 /*#__PURE__*/ _jsxRuntime.jsxs(_reactBootstrap.Card.Text, {
                                     __source: {
                                         fileName: "src/components/movie-view/movie-view.jsx",
-                                        lineNumber: 42
+                                        lineNumber: 93
                                     },
                                     __self: this,
                                     children: [
@@ -3845,7 +3916,7 @@ class MovieView extends _reactDefault.default.Component {
                                 /*#__PURE__*/ _jsxRuntime.jsxs(_reactBootstrap.Card.Text, {
                                     __source: {
                                         fileName: "src/components/movie-view/movie-view.jsx",
-                                        lineNumber: 43
+                                        lineNumber: 94
                                     },
                                     __self: this,
                                     children: [
@@ -3857,7 +3928,7 @@ class MovieView extends _reactDefault.default.Component {
                                 /*#__PURE__*/ _jsxRuntime.jsxs(_reactBootstrap.Card.Text, {
                                     __source: {
                                         fileName: "src/components/movie-view/movie-view.jsx",
-                                        lineNumber: 44
+                                        lineNumber: 95
                                     },
                                     __self: this,
                                     children: [
@@ -3869,7 +3940,7 @@ class MovieView extends _reactDefault.default.Component {
                                 /*#__PURE__*/ _jsxRuntime.jsxs(_reactBootstrap.Card.Text, {
                                     __source: {
                                         fileName: "src/components/movie-view/movie-view.jsx",
-                                        lineNumber: 45
+                                        lineNumber: 96
                                     },
                                     __self: this,
                                     children: [
@@ -3892,33 +3963,34 @@ class MovieView extends _reactDefault.default.Component {
                                     },
                                     __source: {
                                         fileName: "src/components/movie-view/movie-view.jsx",
-                                        lineNumber: 46
+                                        lineNumber: 97
                                     },
                                     __self: this
                                 }),
                                 /*#__PURE__*/ _jsxRuntime.jsx(_reactBootstrap.Button, {
                                     variant: "primary",
                                     className: "custom-btn",
-                                    onClick: addFavorite,
+                                    onClick: (event)=>isMovieAFavorite ? this.removeFromFavorite(event) : this.addFavorite(event)
+                                    ,
                                     __source: {
                                         fileName: "src/components/movie-view/movie-view.jsx",
-                                        lineNumber: 51
+                                        lineNumber: 102
                                     },
                                     __self: this,
-                                    children: "Add to favorites"
+                                    children: isMovieAFavorite ? 'Remove From Favorites' : 'Add to favorites'
                                 }),
                                 /*#__PURE__*/ _jsxRuntime.jsx(_reactRouterDom.Link, {
                                     to: `/directors/${movie.Director.Name}`,
                                     __source: {
                                         fileName: "src/components/movie-view/movie-view.jsx",
-                                        lineNumber: 58
+                                        lineNumber: 109
                                     },
                                     __self: this,
                                     children: /*#__PURE__*/ _jsxRuntime.jsx(_reactBootstrap.Button, {
                                         variant: "link",
                                         __source: {
                                             fileName: "src/components/movie-view/movie-view.jsx",
-                                            lineNumber: 59
+                                            lineNumber: 110
                                         },
                                         __self: this,
                                         children: "Director Info"
@@ -3928,14 +4000,14 @@ class MovieView extends _reactDefault.default.Component {
                                     to: `/genres/${movie.Genre.Name}`,
                                     __source: {
                                         fileName: "src/components/movie-view/movie-view.jsx",
-                                        lineNumber: 61
+                                        lineNumber: 112
                                     },
                                     __self: this,
                                     children: /*#__PURE__*/ _jsxRuntime.jsx(_reactBootstrap.Button, {
                                         variant: "link",
                                         __source: {
                                             fileName: "src/components/movie-view/movie-view.jsx",
-                                            lineNumber: 62
+                                            lineNumber: 113
                                         },
                                         __self: this,
                                         children: "Genre Info"
@@ -42362,13 +42434,13 @@ var _reactRedux = require("react-redux");
 class ProfileView extends _reactDefault.default.Component {
     constructor(){
         super();
-    // this.state = {
-    //     Username: null,
-    //     Password: null,
-    //     Email: null,
-    //     Birthday: null,
-    //     FavoriteMovies: []
-    // };
+        this.state = {
+            Username: null,
+            Password: null,
+            Email: null,
+            Birthday: null,
+            FavoriteMovies: []
+        };
     }
     componentDidMount() {
         const accessToken = localStorage.getItem('token');
@@ -42421,21 +42493,42 @@ class ProfileView extends _reactDefault.default.Component {
         });
     };
     //Sends a DELETE request to API and console.log message indicates success
-    removeFavorite(e, movie) {
-        e.preventDefault();
+    removeFromFavorite = (event)=>{
+        event.preventDefault();
+        console.log('adding to favorite: ', this.props.movie, this.props.user);
         const username = localStorage.getItem("user");
         const token = localStorage.getItem("token");
-        _axiosDefault.default.delete(`https://nix-flix-93.herokuapp.com/users/${username}/Movies/${movie}`, {
+        console.log('remove', token);
+        _axiosDefault.default.delete(`https://nixflix-93.herokuapp.com/users/${username}/movies/${this.props.movie._id}`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
         }).then(()=>{
-            console.log(`${movie.Title} was removed from your favorite`);
-            window.open("/users/:username", "__self");
+            alert(`${this.props.movie.Title} was removed to your favorites list`);
         }).catch((err)=>{
             console.log(err);
+        //   });
         });
-    }
+    };
+    // removeFavorite(e, movie) {
+    //     e.preventDefault();
+    //     const username = localStorage.getItem("user");
+    //     const token = localStorage.getItem("token");
+    //     axios
+    //       .delete(
+    //         `https://nix-flix-93.herokuapp.com/users/${username}/Movies/${movie}`,
+    //         {
+    //           headers: { Authorization: `Bearer ${token}` },
+    //         }
+    //       )
+    //       .then(() => {
+    //         console.log(`${movie.Title} was removed from your favorite`);
+    //         window.open("/users/:username", "__self");
+    //       })
+    //       .catch((err) => {
+    //         console.log(err);
+    //       });
+    //   }
     //Sends DELETE request to API and console.log message indicates success
     removeUser() {
         const Username = localStorage.getItem('user');
@@ -42479,40 +42572,40 @@ class ProfileView extends _reactDefault.default.Component {
         return(/*#__PURE__*/ _jsxRuntime.jsxs(_reactBootstrap.Container, {
             __source: {
                 fileName: "src/components/profile-view/profile-view.jsx",
-                lineNumber: 152
+                lineNumber: 176
             },
             __self: this,
             children: [
                 /*#__PURE__*/ _jsxRuntime.jsx(_reactBootstrap.Row, {
                     __source: {
                         fileName: "src/components/profile-view/profile-view.jsx",
-                        lineNumber: 153
+                        lineNumber: 178
                     },
                     __self: this,
                     children: /*#__PURE__*/ _jsxRuntime.jsx(_reactBootstrap.Col, {
                         __source: {
                             fileName: "src/components/profile-view/profile-view.jsx",
-                            lineNumber: 154
+                            lineNumber: 179
                         },
                         __self: this,
                         children: /*#__PURE__*/ _jsxRuntime.jsx(_reactBootstrap.Card, {
                             id: "update-profile-card",
                             __source: {
                                 fileName: "src/components/profile-view/profile-view.jsx",
-                                lineNumber: 155
+                                lineNumber: 180
                             },
                             __self: this,
                             children: /*#__PURE__*/ _jsxRuntime.jsxs(_reactBootstrap.Card.Body, {
                                 __source: {
                                     fileName: "src/components/profile-view/profile-view.jsx",
-                                    lineNumber: 156
+                                    lineNumber: 181
                                 },
                                 __self: this,
                                 children: [
                                     /*#__PURE__*/ _jsxRuntime.jsx(_reactBootstrap.Card.Title, {
                                         __source: {
                                             fileName: "src/components/profile-view/profile-view.jsx",
-                                            lineNumber: 157
+                                            lineNumber: 182
                                         },
                                         __self: this,
                                         children: "Your Profile"
@@ -42523,21 +42616,21 @@ class ProfileView extends _reactDefault.default.Component {
                                         },
                                         __source: {
                                             fileName: "src/components/profile-view/profile-view.jsx",
-                                            lineNumber: 159
+                                            lineNumber: 184
                                         },
                                         __self: this,
                                         children: [
                                             /*#__PURE__*/ _jsxRuntime.jsxs(_reactBootstrap.FormGroup, {
                                                 __source: {
                                                     fileName: "src/components/profile-view/profile-view.jsx",
-                                                    lineNumber: 170
+                                                    lineNumber: 195
                                                 },
                                                 __self: this,
                                                 children: [
                                                     /*#__PURE__*/ _jsxRuntime.jsx(_reactBootstrap.Form.Label, {
                                                         __source: {
                                                             fileName: "src/components/profile-view/profile-view.jsx",
-                                                            lineNumber: 171
+                                                            lineNumber: 196
                                                         },
                                                         __self: this,
                                                         children: "Username"
@@ -42552,7 +42645,7 @@ class ProfileView extends _reactDefault.default.Component {
                                                         required: true,
                                                         __source: {
                                                             fileName: "src/components/profile-view/profile-view.jsx",
-                                                            lineNumber: 172
+                                                            lineNumber: 197
                                                         },
                                                         __self: this
                                                     })
@@ -42561,14 +42654,14 @@ class ProfileView extends _reactDefault.default.Component {
                                             /*#__PURE__*/ _jsxRuntime.jsxs(_reactBootstrap.FormGroup, {
                                                 __source: {
                                                     fileName: "src/components/profile-view/profile-view.jsx",
-                                                    lineNumber: 182
+                                                    lineNumber: 207
                                                 },
                                                 __self: this,
                                                 children: [
                                                     /*#__PURE__*/ _jsxRuntime.jsx(_reactBootstrap.Form.Label, {
                                                         __source: {
                                                             fileName: "src/components/profile-view/profile-view.jsx",
-                                                            lineNumber: 183
+                                                            lineNumber: 208
                                                         },
                                                         __self: this,
                                                         children: "Password"
@@ -42583,7 +42676,7 @@ class ProfileView extends _reactDefault.default.Component {
                                                         required: true,
                                                         __source: {
                                                             fileName: "src/components/profile-view/profile-view.jsx",
-                                                            lineNumber: 184
+                                                            lineNumber: 209
                                                         },
                                                         __self: this
                                                     })
@@ -42592,14 +42685,14 @@ class ProfileView extends _reactDefault.default.Component {
                                             /*#__PURE__*/ _jsxRuntime.jsxs(_reactBootstrap.FormGroup, {
                                                 __source: {
                                                     fileName: "src/components/profile-view/profile-view.jsx",
-                                                    lineNumber: 194
+                                                    lineNumber: 219
                                                 },
                                                 __self: this,
                                                 children: [
                                                     /*#__PURE__*/ _jsxRuntime.jsx(_reactBootstrap.Form.Label, {
                                                         __source: {
                                                             fileName: "src/components/profile-view/profile-view.jsx",
-                                                            lineNumber: 195
+                                                            lineNumber: 220
                                                         },
                                                         __self: this,
                                                         children: "Email"
@@ -42614,7 +42707,7 @@ class ProfileView extends _reactDefault.default.Component {
                                                         required: true,
                                                         __source: {
                                                             fileName: "src/components/profile-view/profile-view.jsx",
-                                                            lineNumber: 196
+                                                            lineNumber: 221
                                                         },
                                                         __self: this
                                                     })
@@ -42623,14 +42716,14 @@ class ProfileView extends _reactDefault.default.Component {
                                             /*#__PURE__*/ _jsxRuntime.jsxs(_reactBootstrap.FormGroup, {
                                                 __source: {
                                                     fileName: "src/components/profile-view/profile-view.jsx",
-                                                    lineNumber: 206
+                                                    lineNumber: 231
                                                 },
                                                 __self: this,
                                                 children: [
                                                     /*#__PURE__*/ _jsxRuntime.jsx(_reactBootstrap.Form.Label, {
                                                         __source: {
                                                             fileName: "src/components/profile-view/profile-view.jsx",
-                                                            lineNumber: 207
+                                                            lineNumber: 232
                                                         },
                                                         __self: this,
                                                         children: "Birthday"
@@ -42645,7 +42738,7 @@ class ProfileView extends _reactDefault.default.Component {
                                                         required: true,
                                                         __source: {
                                                             fileName: "src/components/profile-view/profile-view.jsx",
-                                                            lineNumber: 208
+                                                            lineNumber: 233
                                                         },
                                                         __self: this
                                                     })
@@ -42654,7 +42747,7 @@ class ProfileView extends _reactDefault.default.Component {
                                             /*#__PURE__*/ _jsxRuntime.jsx("br", {
                                                 __source: {
                                                     fileName: "src/components/profile-view/profile-view.jsx",
-                                                    lineNumber: 216
+                                                    lineNumber: 241
                                                 },
                                                 __self: this
                                             }),
@@ -42665,7 +42758,7 @@ class ProfileView extends _reactDefault.default.Component {
                                                 onClick: this.updateUser,
                                                 __source: {
                                                     fileName: "src/components/profile-view/profile-view.jsx",
-                                                    lineNumber: 217
+                                                    lineNumber: 242
                                                 },
                                                 __self: this,
                                                 children: "Update User Info"
@@ -42677,7 +42770,7 @@ class ProfileView extends _reactDefault.default.Component {
                                                 ,
                                                 __source: {
                                                     fileName: "src/components/profile-view/profile-view.jsx",
-                                                    lineNumber: 224
+                                                    lineNumber: 249
                                                 },
                                                 __self: this,
                                                 children: "Delete Profile"
@@ -42692,26 +42785,26 @@ class ProfileView extends _reactDefault.default.Component {
                 /*#__PURE__*/ _jsxRuntime.jsx(_reactBootstrap.Row, {
                     __source: {
                         fileName: "src/components/profile-view/profile-view.jsx",
-                        lineNumber: 236
+                        lineNumber: 261
                     },
                     __self: this,
                     children: /*#__PURE__*/ _jsxRuntime.jsx(_reactBootstrap.Col, {
                         id: "fav-movie-card-col",
                         __source: {
                             fileName: "src/components/profile-view/profile-view.jsx",
-                            lineNumber: 237
+                            lineNumber: 262
                         },
                         __self: this,
                         children: /*#__PURE__*/ _jsxRuntime.jsx(_reactBootstrap.Card, {
                             __source: {
                                 fileName: "src/components/profile-view/profile-view.jsx",
-                                lineNumber: 238
+                                lineNumber: 263
                             },
                             __self: this,
                             children: /*#__PURE__*/ _jsxRuntime.jsxs(_reactBootstrap.Card.Body, {
                                 __source: {
                                     fileName: "src/components/profile-view/profile-view.jsx",
-                                    lineNumber: 240
+                                    lineNumber: 265
                                 },
                                 __self: this,
                                 children: [
@@ -42719,33 +42812,33 @@ class ProfileView extends _reactDefault.default.Component {
                                         id: "fav-movie-card-title",
                                         __source: {
                                             fileName: "src/components/profile-view/profile-view.jsx",
-                                            lineNumber: 241
+                                            lineNumber: 266
                                         },
                                         __self: this,
                                         children: "Your Favorite Movies"
                                     }),
-                                    FavoriteMovies.length === 0 && /*#__PURE__*/ _jsxRuntime.jsx("div", {
+                                    !FavoriteMovies || FavoriteMovies.length === 0 && /*#__PURE__*/ _jsxRuntime.jsx("div", {
                                         __source: {
                                             fileName: "src/components/profile-view/profile-view.jsx",
-                                            lineNumber: 243
+                                            lineNumber: 268
                                         },
                                         __self: this,
-                                        children: "You haven't added any movies to your favorites list :("
+                                        children: "You haven't added any movies to your favorites list"
                                     }),
                                     /*#__PURE__*/ _jsxRuntime.jsx(_reactBootstrap.Row, {
                                         __source: {
                                             fileName: "src/components/profile-view/profile-view.jsx",
-                                            lineNumber: 245
+                                            lineNumber: 270
                                         },
                                         __self: this,
-                                        children: FavoriteMovies.length > 0 && movies.map((movie)=>{
+                                        children: FavoriteMovies?.length > 0 && movies.map((movie)=>{
                                             if (movie._id === FavoriteMovies.find((fav)=>fav === movie._id
                                             )) return(/*#__PURE__*/ _jsxRuntime.jsxs(_reactBootstrap.Card, {
                                                 id: "fav-movie-card-card",
                                                 className: "mx-auto",
                                                 __source: {
                                                     fileName: "src/components/profile-view/profile-view.jsx",
-                                                    lineNumber: 249
+                                                    lineNumber: 274
                                                 },
                                                 __self: this,
                                                 children: [
@@ -42756,14 +42849,14 @@ class ProfileView extends _reactDefault.default.Component {
                                                         src: movie.ImagePath,
                                                         __source: {
                                                             fileName: "src/components/profile-view/profile-view.jsx",
-                                                            lineNumber: 250
+                                                            lineNumber: 275
                                                         },
                                                         __self: this
                                                     }),
                                                     /*#__PURE__*/ _jsxRuntime.jsxs(_reactBootstrap.Card.Body, {
                                                         __source: {
                                                             fileName: "src/components/profile-view/profile-view.jsx",
-                                                            lineNumber: 256
+                                                            lineNumber: 281
                                                         },
                                                         __self: this,
                                                         children: [
@@ -42771,7 +42864,7 @@ class ProfileView extends _reactDefault.default.Component {
                                                                 className: "movie-title",
                                                                 __source: {
                                                                     fileName: "src/components/profile-view/profile-view.jsx",
-                                                                    lineNumber: 257
+                                                                    lineNumber: 282
                                                                 },
                                                                 __self: this,
                                                                 children: movie.Title
@@ -42782,7 +42875,7 @@ class ProfileView extends _reactDefault.default.Component {
                                                                 ,
                                                                 __source: {
                                                                     fileName: "src/components/profile-view/profile-view.jsx",
-                                                                    lineNumber: 260
+                                                                    lineNumber: 285
                                                                 },
                                                                 __self: this,
                                                                 children: "Remove from Favorites"
@@ -42802,30 +42895,31 @@ class ProfileView extends _reactDefault.default.Component {
         }));
     }
 }
-ProfileView.propTypes = {
-    movie: _propTypesDefault.default.shape({
-        Title: _propTypesDefault.default.string.isRequired,
-        Description: _propTypesDefault.default.string.isRequired,
-        Genre: _propTypesDefault.default.shape({
-            Name: _propTypesDefault.default.string.isRequired,
-            Description: _propTypesDefault.default.string.isRequired
-        }).isRequired,
-        Director: _propTypesDefault.default.shape({
-            Name: _propTypesDefault.default.string.isRequired,
-            Bio: _propTypesDefault.default.string.isRequired
-        }).isRequired,
-        ImagePath: _propTypesDefault.default.string.isRequired,
-        Featured: _propTypesDefault.default.bool.isRequired
-    }).isRequired,
-    user: _propTypesDefault.default.shape({
-        Username: _propTypesDefault.default.string.isRequired,
-        Password: _propTypesDefault.default.string.isRequired,
-        Email: _propTypesDefault.default.string.isRequired,
-        Birthday: _propTypesDefault.default.date,
-        FavoriteMovies: _propTypesDefault.default.arrayOf(_propTypesDefault.default.arrayOf.shape({
-        }))
-    }).isRequired
-};
+// ProfileView.propTypes = {
+//     movie: PropTypes.shape({
+//         Title: PropTypes.string.isRequired,
+//         Description: PropTypes.string.isRequired,
+//         Genre: PropTypes.shape({
+//             Name: PropTypes.string.isRequired,
+//             Description: PropTypes.string.isRequired
+//         }).isRequired,
+//         Director: PropTypes.shape({
+//             Name: PropTypes.string.isRequired,
+//             Bio: PropTypes.string.isRequired
+//         }).isRequired,
+//         ImagePath: PropTypes.string.isRequired,
+//         Featured: PropTypes.bool.isRequired
+//     }).isRequired,
+//     user: PropTypes.shape({
+//         Username: PropTypes.string.isRequired,
+//         Password: PropTypes.string.isRequired,
+//         Email: PropTypes.string.isRequired,
+//         Birthday: PropTypes.date,
+//         FavoriteMovies: PropTypes.arrayOf(PropTypes.arrayOf.shape({
+//             //Not sure how to do this
+//         }))
+//     }).isRequired
+// }
 const mapStateToProps = (state)=>{
     return {
         movies: state.movies,

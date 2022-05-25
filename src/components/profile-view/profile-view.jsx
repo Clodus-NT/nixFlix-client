@@ -12,20 +12,20 @@ export class ProfileView extends React.Component {
     constructor() {
         super();
 
-        // this.state = {
-        //     Username: null,
-        //     Password: null,
-        //     Email: null,
-        //     Birthday: null,
-        //     FavoriteMovies: []
-        // };
+        this.state = {
+            Username: null,
+            Password: null,
+            Email: null,
+            Birthday: null,
+            FavoriteMovies: []
+        };
     }
 
     componentDidMount() {
         const accessToken = localStorage.getItem('token');
         this.getUser(accessToken);
     }
-
+    
     //Gotta make sure the user who is trying to update has a token
     getUser(token) {
         const Username = localStorage.getItem('user');
@@ -80,27 +80,51 @@ export class ProfileView extends React.Component {
     }
 
     //Sends a DELETE request to API and console.log message indicates success
-    removeFavorite(e, movie) {
-        e.preventDefault();
+    removeFromFavorite = (event) => {
+        event.preventDefault()
+
+        console.log('adding to favorite: ', this.props.movie, this.props.user)
     
         const username = localStorage.getItem("user");
         const token = localStorage.getItem("token");
+        console.log('remove', token)
     
         axios
           .delete(
-            `https://nix-flix-93.herokuapp.com/users/${username}/Movies/${movie}`,
+            `https://nixflix-93.herokuapp.com/users/${username}/movies/${this.props.movie._id}`,
             {
-              headers: { Authorization: `Bearer ${token}` },
+              headers: { Authorization:`Bearer ${token}`}
             }
           )
           .then(() => {
-            console.log(`${movie.Title} was removed from your favorite`);
-            window.open("/users/:username", "__self");
+            alert(`${this.props.movie.Title} was removed to your favorites list`);
           })
           .catch((err) => {
             console.log(err);
-          });
-      }
+        //   });
+      })
+    }
+    // removeFavorite(e, movie) {
+    //     e.preventDefault();
+    
+    //     const username = localStorage.getItem("user");
+    //     const token = localStorage.getItem("token");
+    
+    //     axios
+    //       .delete(
+    //         `https://nix-flix-93.herokuapp.com/users/${username}/Movies/${movie}`,
+    //         {
+    //           headers: { Authorization: `Bearer ${token}` },
+    //         }
+    //       )
+    //       .then(() => {
+    //         console.log(`${movie.Title} was removed from your favorite`);
+    //         window.open("/users/:username", "__self");
+    //       })
+    //       .catch((err) => {
+    //         console.log(err);
+    //       });
+    //   }
 
     //Sends DELETE request to API and console.log message indicates success
     removeUser() {
@@ -150,6 +174,7 @@ export class ProfileView extends React.Component {
 
         return (
             <Container>
+            {/* Movie Card */}
             <Row>
                 <Col>
                     <Card id="update-profile-card">
@@ -236,14 +261,14 @@ export class ProfileView extends React.Component {
             <Row>
                 <Col id="fav-movie-card-col">
                     <Card>
-                        
+                        {/* Fav Movies */}
                         <Card.Body>
                             <Card.Title id="fav-movie-card-title">Your Favorite Movies</Card.Title>
-                            {FavoriteMovies.length === 0 && (
-                                <div>You haven't added any movies to your favorites list :(</div>
+                            {!FavoriteMovies || FavoriteMovies.length === 0 && (
+                                <div>You haven't added any movies to your favorites list</div>
                             )}
                             <Row>
-                                {FavoriteMovies.length > 0 && movies.map((movie) => {
+                                {FavoriteMovies?.length > 0 && movies.map((movie) => {
                                     if (movie._id === FavoriteMovies.find((fav) => fav === movie._id)) {
                                         return (
                                             <Card id="fav-movie-card-card" key={movie._id}  className="mx-auto">
@@ -275,31 +300,31 @@ export class ProfileView extends React.Component {
     }
 }
 
-ProfileView.propTypes = {
-    movie: PropTypes.shape({
-        Title: PropTypes.string.isRequired,
-        Description: PropTypes.string.isRequired,
-        Genre: PropTypes.shape({
-            Name: PropTypes.string.isRequired,
-            Description: PropTypes.string.isRequired
-        }).isRequired,
-        Director: PropTypes.shape({
-            Name: PropTypes.string.isRequired,
-            Bio: PropTypes.string.isRequired
-        }).isRequired,
-        ImagePath: PropTypes.string.isRequired,
-        Featured: PropTypes.bool.isRequired
-    }).isRequired,
-    user: PropTypes.shape({
-        Username: PropTypes.string.isRequired,
-        Password: PropTypes.string.isRequired,
-        Email: PropTypes.string.isRequired,
-        Birthday: PropTypes.date,
-        FavoriteMovies: PropTypes.arrayOf(PropTypes.arrayOf.shape({
-            //Not sure how to do this
-        }))
-    }).isRequired
-}
+// ProfileView.propTypes = {
+//     movie: PropTypes.shape({
+//         Title: PropTypes.string.isRequired,
+//         Description: PropTypes.string.isRequired,
+//         Genre: PropTypes.shape({
+//             Name: PropTypes.string.isRequired,
+//             Description: PropTypes.string.isRequired
+//         }).isRequired,
+//         Director: PropTypes.shape({
+//             Name: PropTypes.string.isRequired,
+//             Bio: PropTypes.string.isRequired
+//         }).isRequired,
+//         ImagePath: PropTypes.string.isRequired,
+//         Featured: PropTypes.bool.isRequired
+//     }).isRequired,
+//     user: PropTypes.shape({
+//         Username: PropTypes.string.isRequired,
+//         Password: PropTypes.string.isRequired,
+//         Email: PropTypes.string.isRequired,
+//         Birthday: PropTypes.date,
+//         FavoriteMovies: PropTypes.arrayOf(PropTypes.arrayOf.shape({
+//             //Not sure how to do this
+//         }))
+//     }).isRequired
+// }
 
 const mapStateToProps = (state) => {
     return {
