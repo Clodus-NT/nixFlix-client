@@ -31,7 +31,7 @@ export class MovieView extends React.Component {
     }
 
     addFavorite = (event) => {
-        event.preventDefault();
+        event.preventDefault()
 
         console.log('adding to favorites: ', this.props.movie, this.props.user)
     
