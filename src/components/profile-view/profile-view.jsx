@@ -13,10 +13,10 @@ export class ProfileView extends React.Component {
         super();
 
         this.state = {
-            Username: null,
-            Password: null,
-            Email: null,
-            Birthday: null,
+            Username: '',
+            Password: '',
+            Email: '',
+            Birthday: '',
             FavoriteMovies: []
         };
     }
@@ -66,16 +66,15 @@ export class ProfileView extends React.Component {
             headers: { Authorization: `Bearer ${token}`}
         })
         .then((response) => {
-            this.props.editUser({
+            this.setState({
                 Username: response.data.Username,
                 Password: response.data.Password,
-                Email: response.data.Password,
+                Email: response.data.Email,
                 Birthday: response.data.Birthday
             });
 
             localStorage.setItem('user', this.state.Username);
             alert("Profile has been updated!");
-            window.open('/profile', '_self');
         });
     }
 
@@ -83,7 +82,7 @@ export class ProfileView extends React.Component {
     removeFromFavorite = (event) => {
         event.preventDefault()
 
-        console.log('adding to favorite: ', this.props.movie, this.props.user)
+        console.log('removing from favorites: ', this.props.movie, this.props.user)
     
         const username = localStorage.getItem("user");
         const token = localStorage.getItem("token");
@@ -97,34 +96,34 @@ export class ProfileView extends React.Component {
             }
           )
           .then(() => {
-            alert(`${this.props.movie.Title} was removed to your favorites list`);
+            alert(`${this.props.movie.Title} was removed from your favorites list`);
           })
           .catch((err) => {
             console.log(err);
-        //   });
       })
     }
-    // removeFavorite(e, movie) {
-    //     e.preventDefault();
-    
+    // removeFromFavorite = (event) => {
+    //     event.preventDefault()
     //     const username = localStorage.getItem("user");
     //     const token = localStorage.getItem("token");
+    //     console.log('removing from favorites: ', this.props.movie, this.props.user)
+    
+    //     console.log('remove', token)
     
     //     axios
     //       .delete(
-    //         `https://nix-flix-93.herokuapp.com/users/${username}/Movies/${movie}`,
+    //         `https://nixflix-93.herokuapp.com/users/${username}/movies/${this.props.movie._id}`,
     //         {
-    //           headers: { Authorization: `Bearer ${token}` },
+    //           headers: { Authorization:`Bearer ${token}`}
     //         }
     //       )
     //       .then(() => {
-    //         console.log(`${movie.Title} was removed from your favorite`);
-    //         window.open("/users/:username", "__self");
+    //         alert(`${this.props.movie.Title} was removed to your favorites list`);
     //       })
     //       .catch((err) => {
     //         console.log(err);
-    //       });
-    //   }
+    //   })
+    // }
 
     //Sends DELETE request to API and console.log message indicates success
     removeUser() {
@@ -168,9 +167,31 @@ export class ProfileView extends React.Component {
         });
     }
 
+    /* removeFavorite(e, movie) {
+        e.preventDefault();
+    
+        const username = localStorage.getItem("user");
+        const token = localStorage.getItem("token");
+    
+        axios
+          .delete(
+            `https://nix-flix-93.herokuapp.com/users/${username}/Movies/${movie}`,
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          )
+          .then(() => {
+            console.log(`${movie.Title} was removed from your favorite`);
+            window.open("/users/:username", "__self");
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } */
+
     render() {
         const { movies } = this.props;
-        const { FavoriteMovies, Username, Password, Email, Birthday } = this.props;
+        const { FavoriteMovies, Username, Password, Email, Birthday } = this.state;
 
         return (
             <Container>
@@ -183,13 +204,7 @@ export class ProfileView extends React.Component {
                             {/* <Card.Text>All fields are required to update your information</Card.Text> */}
                             <Form
                                 onSubmit={(e) => {
-                                    this.updateUser(
-                                        e,
-                                        this.Username,
-                                        this.Password,
-                                        this.Email,
-                                        this.Birthday
-                                    )
+                                    this.updateUser(e)
                                 }} >
                                 {/* Username Form */}
                                 <FormGroup>
@@ -204,7 +219,7 @@ export class ProfileView extends React.Component {
                                 </FormGroup>
 
                                 {/* Password Form */}
-                                <FormGroup>
+                                {/* <FormGroup>
                                     <Form.Label>Password</Form.Label>
                                     <FormControl
                                         type="password"
@@ -213,7 +228,7 @@ export class ProfileView extends React.Component {
                                         value={Password}
                                         onChange={(e) => this.setPassword(e.target.value)}
                                         required />
-                                </FormGroup>
+                                </FormGroup> */}
 
                                 {/* Email Form */}
                                 <FormGroup>
@@ -282,7 +297,7 @@ export class ProfileView extends React.Component {
                                                     <Card.Title className="movie-title">
                                                         {movie.Title}
                                                     </Card.Title>
-                                                    <Button value={movie._id} onClick={(e) => this.removeFavorite(e, movie)}>
+                                                    <Button value={movie._id} onClick={(e) => this.removeFromFavorite(e, movie)}>
                                                         Remove from Favorites
                                                     </Button>
                                                     </Card.Body>

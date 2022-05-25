@@ -123,13 +123,6 @@ class MainView extends React.Component {
         const { movies, user } = this.state;
         // const { movies, user } = this.props;
         console.log('logged in: ', user);
-        //If no user, render LoginView
-        //If there is a user logged in, user details are passed
-        //as a prop to LoginView
-        // if (!user) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
-
-        //Before movies have been loaded
-        // if (movies.length === 0) return <div className="main-view" />;
 
         return (
             <Router>
@@ -139,7 +132,7 @@ class MainView extends React.Component {
                     {/* <Routes> */}
                         {/* Login */}
                     <Route exact path="/" render={() => {
-                        if (!user) return <Col>
+                        if (!user && !localStorage.getItem('user')) return <Col>
                             <LoginView onLoggedIn={user => this.onLoggedIn(user)} />
                         </Col>
                         return <MoviesList movies={movies}/>

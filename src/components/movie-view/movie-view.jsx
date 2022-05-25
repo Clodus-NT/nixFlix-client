@@ -9,15 +9,15 @@ export class MovieView extends React.Component {
     removeFromFavorite = (event) => {
         event.preventDefault()
 
-        console.log('adding to favorite: ', this.props.movie, this.props.user)
+        console.log('removing from favorites: ', this.props.movie, this.props.user)
     
         const username = localStorage.getItem("user");
         const token = localStorage.getItem("token");
-        console.log('remove', token)
+        console.log('remove auth', token)
     
         axios
           .delete(
-            `https://nixflix-93.herokuapp.com/users/${username}/movies/${this.props.movie._id}`, {},
+            `https://nixflix-93.herokuapp.com/users/${username}/movies/${this.props.movie._id}`,
             {
               headers: { Authorization:`Bearer ${token}`}
             }
@@ -33,17 +33,17 @@ export class MovieView extends React.Component {
     addFavorite = (event) => {
         event.preventDefault();
 
-        console.log('adding to favorite: ', this.props.movie, this.props.user)
+        console.log('adding to favorites: ', this.props.movie, this.props.user)
     
         const username = localStorage.getItem("user");
         const token = localStorage.getItem("token");
-        console.log('movie view: ', token);
+        console.log('add auth: ', token);
     
         axios
           .post(
-            `https://nix-flix-93.herokuapp.com/users/${username}/Movies/${this.props.movie._id}`, {},
+            `https://nixflix-93.herokuapp.com/users/${username}/Movies/${this.props.movie._id}`,
             {
-              headers: { Authorization: `Bearer ${token}` },
+              headers: { Authorization: `Bearer ${token}` }
             }
           )
           .then(() => {
@@ -55,32 +55,10 @@ export class MovieView extends React.Component {
     }
 
     render () {
+        if (!this.props?.user || !this.props.movie) return <div />
         const { movie } = this.props;
         const isMovieAFavorite = this.props.user.FavoriteMovies.includes(this.props.movie._id);
-        console.log('single movie view: ')
-
-
-        // const addFavorite = (e, movie) => {
-        //     e.preventDefault();
-        
-        //     const username = localStorage.getItem("user");
-        //     const token = localStorage.getItem("token");
-        
-        //     axios
-        //       .post(
-        //         `https://nix-flix-93.herokuapp.com/users/${username}/Movies/${movie}`,
-        //         {
-        //           headers: { Authorization: `Bearer ${token}` },
-        //         }
-        //       )
-        //       .then(() => {
-        //         alert(`${movie.Title} was removed from your favorites list`);
-        //         window.open("/users/:username", "__self");
-        //       })
-        //       .catch((err) => {
-        //         console.log(err);
-        //       });
-        //   }
+        console.log('single movie view: ', movie)
 
         return (
             <Container>
