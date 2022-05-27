@@ -7,11 +7,7 @@ import { BrowserRouter as Router, Route, Routes, Redirect } from 'react-router-d
 
 import { 
     setMovies, 
-    setUser,
-    regUser,
-    editUser,
-    addFavMovie,
-    remFavMovie
+    setUser
     } from '../../actions/actions';
 
 import MoviesList from '../movies-list/movies-list';
@@ -24,7 +20,7 @@ import { MovieView } from '../movie-view/movie-view';
 // import { MovieCard } from '../movie-card/movie-card';
 import { DirectorView } from '../director-view/director-view';
 import { GenreView } from '../genre-view/genre-view'; 
-import { ProfileView } from '../profile-view/profile-view';
+import ProfileView from '../profile-view/profile-view';
 import { Container, Col, Row } from 'react-bootstrap';
 
 import './main-view.scss';
@@ -60,13 +56,6 @@ class MainView extends React.Component {
             .catch(function (error) {
                 console.log(error)
             });
-            // const { setUser } = this.props;
-            // setUser(localStorage.getItem('user'));
-
-            // // this.setState({
-            // //     user: localStorage.getItem('user')
-            // // });
-            // this.getMovies(accessToken);
         }
     }
 
@@ -102,7 +91,6 @@ class MainView extends React.Component {
         this.setState({
             user: authData.user.Username
         });
-        // this.props.setUser(authData.user);
 
         localStorage.setItem('token', authData.token);
         localStorage.setItem('user', authData.user.Username);
@@ -136,11 +124,6 @@ class MainView extends React.Component {
                             <LoginView onLoggedIn={user => this.onLoggedIn(user)} />
                         </Col>
                         return <MoviesList movies={movies}/>
-                        // return movies.map(m => (
-                        //     <Col md={3} key={m._id}>
-                        //         <MovieCard movie={m} />
-                        //     </Col>
-                        // ))
                     }} />
                         {/* RegistrationView */}
                     <Route path="/register" render={() => {
@@ -163,15 +146,6 @@ class MainView extends React.Component {
                             <MovieView user={this.state?.fullUser} movie={movies.find(m => m._id === match.params.movieId)} onBackClick={() => history.goBack()} />
                         </Col>
                     }} />
-                    {/* <Route path="/movies/:movieId" render={({ match, history }) => {
-                        if (!user) return <Col>
-                            <LoginView onLoggedIn={user => this.onLoggedIn(user)} />
-                        </Col>
-
-                        return <Col md={8}>
-                            <MovieView movie={movies.find(m => m._id === match.params.movieId)} onBackClick={() => history.goBack()} />
-                        </Col>
-                    }} /> */}
                         {/* DirectorView */}
                     <Route path="/directors/:name" render={( { match, history }) => {
 
@@ -209,10 +183,10 @@ class MainView extends React.Component {
     }
 }
 
-let mapStateToProps = state => {
+let mapStateToProps = store => {
     return { 
-        movies: state.movies,
-        user: state.user
+        movies: store.movies,
+        user: store.user
     }
 }
 
@@ -228,4 +202,3 @@ const mapDispatchToProps = dispatch => {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainView);
-// export default connect(mapStateToProps, { setMovies, setUser })(MainView);

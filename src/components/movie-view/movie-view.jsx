@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { setState } from 'react';
 import axios from 'axios';
 import {Button, Card, Container, Row, Col} from 'react-bootstrap';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import './movie-view.scss';
 
 export class MovieView extends React.Component {
-
     removeFromFavorite = (event) => {
         event.preventDefault()
 
@@ -41,7 +40,8 @@ export class MovieView extends React.Component {
     
         axios
           .post(
-            `https://nixflix-93.herokuapp.com/users/${username}/Movies/${this.props.movie._id}`,
+            `https://nixflix-93.herokuapp.com/users/${username}/movies/${this.props.movie._id}`,
+            {},
             {
               headers: { Authorization: `Bearer ${token}` }
             }

@@ -4,8 +4,6 @@ import {
     SET_FILTER, 
     SET_MOVIES,
     SET_USER,
-    REG_USER,
-    EDIT_USER,
     ADD_FAVMOVIE,
     REM_FAVMOVIE
 } from '../actions/actions';
@@ -24,10 +22,6 @@ function movies(state = [], action) {
     switch (action.type) {
         case SET_MOVIES:
             return action.value;
-        case ADD_FAVMOVIE:
-            return action.value;
-        case REM_FAVMOVIE:
-            return action.value;
         default:
             return state;
     }
@@ -37,23 +31,9 @@ function user(state = '', action) {
     switch (action.type) {
         case SET_USER:
             return action.user || localStorage.getItem('user') || '';
-        default:
-            return state;
-    }
-}
-
-function registerUser(state = '', action) {
-    switch (action.type) {
-        case REG_USER:
+        case ADD_FAVMOVIE:
             return action.value;
-        default:
-            return state;
-    }
-}
-
-function editedUser(state = '', action) {
-    switch (action.type) {
-        case EDIT_USER:
+        case REM_FAVMOVIE:
             return action.value;
         default:
             return state;
@@ -63,9 +43,7 @@ function editedUser(state = '', action) {
 const moviesApp = combineReducers({
     visibilityFilter,
     movies,
-    user,
-    registerUser,
-    editedUser
+    user
 });
 
 export default moviesApp;

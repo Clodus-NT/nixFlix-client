@@ -3,18 +3,18 @@ import {Button, Card, Container, Row, Col, FormControl, FormGroup, Form} from 'r
 import axios from 'axios';
 import PropTypes from 'prop-types';
 
-import { setUser, editUser } from '../../actions/actions';
+import { remFavMovie } from '../../actions/actions';
 
 import "./profile-view.scss";
 import { connect } from 'react-redux';
 
-export class ProfileView extends React.Component {
+class ProfileView extends React.Component {
     constructor() {
         super();
 
         this.state = {
             Username: '',
-            Password: '',
+            // Password: '',
             Email: '',
             Birthday: '',
             FavoriteMovies: []
@@ -78,10 +78,10 @@ export class ProfileView extends React.Component {
     }
 
     //Sends a DELETE request to API and console.log message indicates success
-    removeFromFavorite = (event) => {
+    removeFromFavorite = (event, movie) => {
         event.preventDefault()
 
-        console.log('removing from favorites: ', this.props.movie, this.props.user)
+        console.log('removing from favorites: ', movie, this.props.user)
     
         const username = localStorage.getItem("user");
         const token = localStorage.getItem("token");
@@ -89,13 +89,15 @@ export class ProfileView extends React.Component {
     
         axios
           .delete(
-            `https://nixflix-93.herokuapp.com/users/${username}/movies/${this.props.movie._id}`,
+            `https://nixflix-93.herokuapp.com/users/${username}/movies/${movie._id}`,
             {
               headers: { Authorization:`Bearer ${token}`}
             }
           )
-          .then(() => {
-            alert(`${this.props.movie.Title} was removed from your favorites list`);
+          .then((res) => {
+            this.setState({ FavoriteMovies: res?.data?.FavoriteMovies });
+            this.props.remFavMovie(res?.data)
+            alert(`${movie.Title} was removed from your favorites list`);
           })
           .catch((err) => {
             console.log(err);
@@ -126,11 +128,11 @@ export class ProfileView extends React.Component {
         });
     }
 
-    setPassword(value) {
-        this.setState({
-            Password: value
-        });
-    }
+    // setPassword(value) {
+    //     this.setState({
+    //         Password: value
+    //     });
+    // }
 
     setEmail(value) {
         this.setState({
@@ -275,48 +277,10 @@ export class ProfileView extends React.Component {
     }
 }
 
-// ProfileView.propTypes = {
-//     movie: PropTypes.shape({
-//         Title: PropTypes.string.isRequired,
-//         Description: PropTypes.string.isRequired,
-//         Genre: PropTypes.shape({
-//             Name: PropTypes.string.isRequired,
-//             Description: PropTypes.string.isRequired
-//         }).isRequired,
-//         Director: PropTypes.shape({
-//             Name: PropTypes.string.isRequired,
-//             Bio: PropTypes.string.isRequired
-//         }).isRequired,
-//         ImagePath: PropTypes.string.isRequired,
-//         Featured: PropTypes.bool.isRequired
-//     }).isRequired,
-//     user: PropTypes.shape({
-//         Username: PropTypes.string.isRequired,
-//         Password: PropTypes.string.isRequired,
-//         Email: PropTypes.string.isRequired,
-//         Birthday: PropTypes.date,
-//         FavoriteMovies: PropTypes.arrayOf(PropTypes.arrayOf.shape({
-//             //Not sure how to do this
-//         }))
-//     }).isRequired
-// }
-
 const mapStateToProps = (state) => {
     return {
-        movies: state.movies,
         user: state.user
     }
 }
 
-const mapDispatchToProps = dispatch => {
-    return {
-        setUser: (user) => {
-            dispatch(setUser(user))
-        },
-        editUser: (user) => {
-            dispatch(editUser(user))
-        }
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(ProfileView);
+export default connect(mapStateToProps, { remFavMovie })(ProfileView);

@@ -1,8 +1,6 @@
 export const SET_MOVIES = 'SET_MOVIES';
 export const SET_FILTER = 'SET_FILTER';
 export const SET_USER = 'SET_USER';
-export const REG_USER = 'REG_USER';
-export const EDIT_USER = 'UPDATE_USER';
 export const ADD_FAVMOVIE = 'ADD_FAVMOVIE';
 export const REM_FAVMOVIE = 'REM_FAVMOVIE';
 
@@ -26,20 +24,6 @@ export function setUser(user) {
         type: SET_USER,
         user: user?.Username
     };
-}
-
-export function regUser(value) {
-    return {
-        type: REG_USER,
-        value
-    }
-}
-
-export function editUser(value) {
-    return {
-        type: EDIT_USER,
-        value
-    }
 }
 
 export function addFavMovie(value) {
