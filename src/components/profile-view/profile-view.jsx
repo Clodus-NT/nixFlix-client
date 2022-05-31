@@ -146,6 +146,11 @@ class ProfileView extends React.Component {
         });
     }
 
+    getBirthdayValue = () => {
+        if (this.state.Birthday) return this.state.Birthday.split('T')[0]
+        return ''
+    }
+
     render() {
         const { movies } = this.props;
         const { FavoriteMovies, Username, Password, Email, Birthday } = this.state;
@@ -205,7 +210,7 @@ class ProfileView extends React.Component {
                                         type="date"
                                         name="birthday"
                                         placeholder="Enter a new birthday"
-                                        value={Birthday}
+                                        value={this.getBirthdayValue()}
                                         onChange={(e) => this.setBirthday(e.target.value)}
                                         required />
                                 </FormGroup>
