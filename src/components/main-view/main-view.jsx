@@ -17,7 +17,6 @@ import { MenuBar } from '../navbar/navbar';
 import { LoginView } from '../login-view/login-view';
 import { RegistrationView } from '../registration-view/registration-view';
 import { MovieView } from '../movie-view/movie-view';
-// import { MovieCard } from '../movie-card/movie-card';
 import { DirectorView } from '../director-view/director-view';
 import { GenreView } from '../genre-view/genre-view'; 
 import ProfileView from '../profile-view/profile-view';
@@ -73,7 +72,6 @@ class MainView extends React.Component {
             headers: { Authorization:`Bearer ${token}`}
         })
         .then(response => {
-            // this.props.setMovies(response.data);
             //Assign result of state
             this.setState({
                 movies: response.data
@@ -109,7 +107,6 @@ class MainView extends React.Component {
     render() {
         if (!this.state) return <>loading...</>
         const { movies, user } = this.state;
-        // const { movies, user } = this.props;
         console.log('logged in: ', user);
 
         return (
@@ -168,9 +165,6 @@ class MainView extends React.Component {
                     }} />
                         {/* ProfileView */}
                     <Route path={`/users/${user}`} render={({ history }) => {
-                        //IF statement removed because it was causing issues with ProfileView
-                        //  if (!user) return <Redirect to="/"
-                        // />
                         return <Col>
                             <ProfileView movies={movies} user={user} onBackClick={() => history.goBack()} />
                         </Col>
