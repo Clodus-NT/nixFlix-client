@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {Form, Button, Card, Container, Col, Row, CardGroup} from 'react-bootstrap';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { HashRouter as Router, Route, Link } from 'react-router-dom';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 

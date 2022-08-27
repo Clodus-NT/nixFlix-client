@@ -1,7 +1,7 @@
 import React, { setState } from 'react';
 import axios from 'axios';
 import {Button, Card, Container, Row, Col} from 'react-bootstrap';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { HashRouter as Router, Route, Link } from 'react-router-dom';
 import './movie-view.scss';
 
 export class MovieView extends React.Component {
@@ -72,7 +72,7 @@ export class MovieView extends React.Component {
                                 <Card.Text>Synopsis: {movie.Description} </Card.Text>
                                 <Card.Text>Director: {movie.Director.Name} </Card.Text>
                                 <Card.Text> About the director: {movie.Director.Bio} </Card.Text>
-                                <Route path=".movies/:movieId" render={({ match, history }) => {
+                                <Route path="#/movies/:movieId" render={({ match, history }) => {
                                     return <Col md={8}>
                                         <MovieView movie={movie.find(m => m._id === match.params.movieId)} onBackClick={() => history.goBack()} />
                                     </Col>
