@@ -19,7 +19,7 @@
   "bugs": {
     "url": "https://github.com/Clodus-NT/nixFlix-client/issues"
   },
-  "homepage": "https://github.com/Clodus-NT/nixFlix-client/",
+  "homepage": "https://github.com/Clodus-NT/nixFlix-client",
   "dependencies": {
     "axios": "^0.26.1",
     "bootstrap": "^5.1.3",

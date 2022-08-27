@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import { connect } from 'react-redux';
 
-import { HashRouter as Router, Route, Routes, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Redirect } from 'react-router-dom';
 
 import { 
     setMovies, 
@@ -123,7 +123,7 @@ class MainView extends React.Component {
                         return <MoviesList movies={movies}/>
                     }} />
                         {/* RegistrationView */}
-                    <Route exact path="#/register" render={() => {
+                    <Route path="/register" render={() => {
                         if(user) {
                             <Redirect to="/" />
                         }
@@ -134,7 +134,7 @@ class MainView extends React.Component {
                         )
                     }} />
                         {/* MovieView */}
-                    <Route exact path="#/movies/:movieId" render={({ match, history }) => {
+                    <Route path="/movies/:movieId" render={({ match, history }) => {
                         if (!user) return <Col>
                             <LoginView onLoggedIn={user => this.onLoggedIn(user)} />
                         </Col>
@@ -144,7 +144,7 @@ class MainView extends React.Component {
                         </Col>
                     }} />
                         {/* DirectorView */}
-                    <Route exact path="#/directors/:name" render={( { match, history }) => {
+                    <Route path="/directors/:name" render={( { match, history }) => {
 
                         if (!user) return <Col><LoginView onLoggedIn={user => this.onLoggedIn(user)} /></Col>
 
@@ -155,7 +155,7 @@ class MainView extends React.Component {
                         )
                     }} />
                         {/* GenreView */}
-                    <Route exact path="#/genres/:name" render={({ match, history }) => {
+                    <Route path="/genres/:name" render={({ match, history }) => {
                         if (!user) return <Col>
                             <LoginView onLoggedIn={user => this.onLoggedIn(user)} />
                         </Col>
@@ -164,7 +164,7 @@ class MainView extends React.Component {
                         </Col>
                     }} />
                         {/* ProfileView */}
-                    <Route exact path={`#/users/${user}`} render={({ history }) => {
+                    <Route path={`/users/${user}`} render={({ history }) => {
                         return <Col>
                             <ProfileView movies={movies} user={user} onBackClick={() => history.goBack()} />
                         </Col>
