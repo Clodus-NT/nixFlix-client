@@ -30,18 +30,18 @@ export function MenuBar({user}) {
                 <Navbar.Brand className="navbar-logo" href="/">nixFlix</Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
-                    <Nav className="ml-auto">
+                    <Nav className="ml-auto navbarLinks">
                     {isAuth() && (
-                        <Link to={`/users/${user}`}>{user}</Link>
+                        <Link className='usersLink' to={`/users/${user}`}>{user}</Link>
                     )}
                     {isAuth() && (
-                        <Button variant="link" onClick={() => { onLoggedOut() }}>Logout</Button>
+                        <Link className='logoutButton' onClick={() => { onLoggedOut() }}>Logout</Link>
                     )}
                     {!isAuth() && (
-                        <Link to="/">Sign-In</Link>
+                        <Link className='signInLink' to="/">Sign-In</Link>
                     )}
                     {!isAuth() && (
-                        <Link to="/register">Sign-Up</Link>
+                        <Link className='registerLink' to="/register">Sign-Up</Link>
                     )}
                     </Nav>
                 </Navbar.Collapse>

@@ -37532,9 +37532,10 @@ function MenuBar({ user  }) {
                 /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Navbar).Collapse, {
                     id: "responsive-navbar-nav",
                     children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Nav), {
-                        className: "ml-auto",
+                        className: "ml-auto navbarLinks",
                         children: [
                             isAuth() && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Link), {
+                                className: "usersLink",
                                 to: `/users/${user}`,
                                 children: user
                             }, void 0, false, {
@@ -37542,8 +37543,8 @@ function MenuBar({ user  }) {
                                 lineNumber: 35,
                                 columnNumber: 25
                             }, this),
-                            isAuth() && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Button), {
-                                variant: "link",
+                            isAuth() && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Link), {
+                                className: "logoutButton",
                                 onClick: ()=>{
                                     onLoggedOut();
                                 },
@@ -37554,6 +37555,7 @@ function MenuBar({ user  }) {
                                 columnNumber: 25
                             }, this),
                             !isAuth() && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Link), {
+                                className: "signInLink",
                                 to: "/",
                                 children: "Sign-In"
                             }, void 0, false, {
@@ -37562,6 +37564,7 @@ function MenuBar({ user  }) {
                                 columnNumber: 25
                             }, this),
                             !isAuth() && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Link), {
+                                className: "registerLink",
                                 to: "/register",
                                 children: "Sign-Up"
                             }, void 0, false, {
