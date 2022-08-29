@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Navbar, Container, Nav, Button } from 'react-bootstrap';
 
 import { connect } from 'react-redux';
@@ -31,16 +32,16 @@ export function MenuBar({user}) {
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="ml-auto">
                     {isAuth() && (
-                        <Nav.Link href={`/users/${user}`}>{user}</Nav.Link>
+                        <Link to={`/users/${user}`}>{user}</Link>
                     )}
                     {isAuth() && (
                         <Button variant="link" onClick={() => { onLoggedOut() }}>Logout</Button>
                     )}
                     {!isAuth() && (
-                        <Nav.Link href="/">Sign-In</Nav.Link>
+                        <Link to="/">Sign-In</Link>
                     )}
                     {!isAuth() && (
-                        <Nav.Link href="/register">Sign-Up</Nav.Link>
+                        <Link to="/register">Sign-Up</Link>
                     )}
                     </Nav>
                 </Navbar.Collapse>

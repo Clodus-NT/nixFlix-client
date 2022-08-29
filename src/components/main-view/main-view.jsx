@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import { connect } from 'react-redux';
 
-import { BrowserRouter as Router, Route, Routes, Redirect } from 'react-router-dom';
+import { HashRouter as Router, Route, Routes, Redirect } from 'react-router-dom';
 
 import { 
     setMovies, 
